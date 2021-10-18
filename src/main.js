@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
 import App from './App.vue'
 import Button from 'ant-design-vue/lib/button';
 import VueClipboard from 'vue-clipboard2';
@@ -7,6 +9,7 @@ import Viewer from 'v-viewer';
 
 Vue.use(VueClipboard);
 Vue.use(Viewer);
+Vue.use(Antd);
 Viewer.setDefaults({
   inline: false,
   navbar: false,

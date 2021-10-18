@@ -2,9 +2,6 @@
   <a-config-provider :locale="zh_CN">
     <a-layout>
       <a-button type="primary">Button</a-button>
-      <div id="app">
-        {{ message }}
-      </div>
       <PageHeader />
       <PageSider />
       <PageContent ref="content" />
@@ -39,3 +36,44 @@ export default {
   }
 }
 </script>
+
+
+<style>
+  /*noinspection CssUnusedSymbol*/
+  button.ant-btn {
+    overflow: hidden;
+  }
+
+  /*noinspection CssUnusedSymbol*/
+  .page-sider.ant-layout-sider-collapsed + .page-content {
+    margin-left: 0 !important;
+  }
+
+  /*noinspection CssUnusedSymbol*/
+  .page-sider.ant-layout-sider-collapsed + .page-content .lookup-class-time-preview {
+    display: none;
+  }
+
+  /*noinspection CssUnusedSymbol*/
+  .conflict-list-hint {
+    font-size: 12px;
+  }
+
+  /*noinspection CssUnusedSymbol*/
+  .conflict-list-class-meta {
+    font-size: 14px;
+    margin: 16px 0 0;
+  }
+
+  /*noinspection CssUnusedSymbol*/
+  .conflict-solving-list-class-meta-wrapper {
+    margin: 8px 0 0 !important;
+    font-size: 14px;
+  }
+
+  /*noinspection CssUnusedSymbol*/
+  .conflict-list-class-meta-time {
+    font-size: 12px;
+    color: rgba(0, 0, 0, .45);
+  }
+</style>
