@@ -1,28 +1,41 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <a-config-provider :locale="zh_CN">
+    <a-layout>
+      <a-button type="primary">Button</a-button>
+      <div id="app">
+        {{ message }}
+      </div>
+      <PageHeader />
+      <PageSider />
+      <PageContent ref="content" />
+    </a-layout>
+  </a-config-provider>
 </template>
+<!--<template>-->
+<!--  <div id="app">-->
+<!--    {{ message }}-->
+<!--  </div>-->
+<!--</template>-->
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN';
+import PageHeader from './components/layouts/PageHeader';
+import PageSider from './components/layouts/PageSider';
+import PageContent from './components/layouts/PageContent';
 
 export default {
-  name: 'App',
+  name: 'app',
   components: {
-    HelloWorld
+    PageHeader,
+    PageSider,
+    PageContent,
+  },
+
+  data() {
+    return {
+      zh_CN,
+      message: '123'
+    };
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
