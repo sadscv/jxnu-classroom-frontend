@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import App from './App.vue'
+import store from './store';
 import Button from 'ant-design-vue/lib/button';
 import VueClipboard from 'vue-clipboard2';
 import './plugins/ant-design-vue';
@@ -26,6 +27,7 @@ VueClipboard.config.autoSetContainer = true;
 Vue.component(Button.name, Button)
 
 new Vue({
+  store,
   render: h => h(App),
 }).$mount('#app')
 

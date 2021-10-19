@@ -1,0 +1,185 @@
+<template>
+  <div ref="wrapper" :class="{'schedule-table-wrapper': true, 'schedule-table-wrapper-capturing': capturing}">
+<!--    How to remove space between 2 chinese characters? Use ConfigProvider to set autoInsertSpaceInButton as false.-->
+    <a-config-provider :get-popup-container="() => $refs.setting" :auto-insert-space-in-button="false">
+      <table class="schedule-table">
+        <thead>
+        <tr>
+          <td class="header-setting">
+            <div ref="setting" :class="{ setting: true, 'setting-show': venueMode }">
+              {{ '123' }}
+              <a-dropdown v-if="!venueMode">
+                <a-button shape="circle" size="small" icon="setting" />
+                <a-menu slot="overlay">
+                  <a-menu-divider />
+                </a-menu>
+              </a-dropdown>
+              <a-button v-else type="danger" size="small" shape="round" @click="venueMode = false">复原</a-button>
+            </div>
+            <div v-show="capturing" class="brand">
+              <img src="../../assets/logo.png" alt="Logo" />
+            </div>
+          </td>
+          <th class="header-period">&nbsp;</th>
+          <th class="header-week" v-for="week in ['一', '二', '三', '四', '五','六','七']" :key="week">{{ week }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(row, index) in rows" :key="index">
+          <th>{{ ['第12节', '第3节', '第4节', '第5节', '第67节', '第89节', '晚上'][index] }}</th>
+          <td class="class-period">
+            <p>{{ classPeriods[index][0] }}</p>
+            <p>- {{ classPeriods[index][1] }}</p>
+          </td>
+          <template v-for="(course, index2) in row">
+            <td v-if="course == null || course.first" :key="index2" :rowspan="course != null ? course.span : 1">
+              <a>*</a>
+              <ClassCard :course="course" v-if="course != null && !course.qr" :venue="venueMode"
+                         @click.native="handleClassCardClick(course.courseId)" />
+              <QrCard v-if="course != null && course.qr" />
+            </td>
+          </template>
+          <!--<template v-for="(course, index2) in row">-->
+            <!--<td v-if="course == null || course.first" :key="index2" :rowspan="course != null ? course.span : 1">-->
+              <!--&lt;!&ndash;<a>123</a>&ndash;&gt;-->
+              <!--<ClassCard :course="course" v-if="course != null && !course.qr" :venue="venueMode"-->
+                         <!--@click.native="handleClassCardClick(course.courseId)" />-->
+              <!--<QrCard v-if="course != null && course.qr" />-->
+            <!--</td>-->
+          <!--</template>-->
+        </tr>
+        </tbody>
+      </table>
+
+    </a-config-provider>
+  </div>
+</template>
+
+<script>
+  import ClassCard from './ClassCard';
+  import QrCard from './QrCard';
+  import {ClassroomTableMixin} from '../../mixins/ClassroomTable';
+
+  export default {
+    name: 'ClassroomTable',
+    components: {
+      QrCard,
+      ClassCard,
+    },
+    mixins: [ClassroomTableMixin],
+  };
+</script>
+
+<style scoped>
+  /*noinspection CssUnusedSymbol*/
+  .schedule-table-wrapper {
+    padding: 8px;
+  }
+
+  .schedule-table {
+    margin: 0;
+    padding: 0;
+    table-layout: fixed;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+  }
+
+  .schedule-table thead tr {
+    height: 32px;
+  }
+
+  .schedule-table tbody tr {
+    height: 100px;
+  }
+
+  .schedule-table tbody tr:nth-child(odd) {
+    background: rgba(0, 0, 0, 0.025);
+  }
+
+  .schedule-table th {
+    user-select: none;
+  }
+
+  .schedule-table td {
+    position: relative;
+  }
+
+  .class-period p {
+    margin: 0;
+  }
+
+  .class-period p:first-child {
+    padding-right: 1em;
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  .class-period p:last-child {
+    padding-left: 1em;
+    color: rgba(0, 0, 0, 0.35);
+  }
+
+  .header-setting {
+    position: relative;
+    width: 28px;
+  }
+
+  .header-period {
+    width: 60px;
+  }
+
+  .header-week {
+    width: 40%;
+  }
+
+  /*noinspection CssUnusedSymbol*/
+  .setting {
+    transition: all 0.2s;
+    white-space: nowrap;
+    position: absolute;
+    text-align: left;
+    opacity: 0;
+    left: 2px;
+    top: 2px;
+  }
+
+  /*noinspection CssUnusedSymbol*/
+  .setting-show {
+    opacity: 1;
+  }
+
+  /*noinspection CssUnusedSymbol*/
+  .schedule-table-wrapper:hover .setting {
+    opacity: 1;
+  }
+
+  /*noinspection CssUnusedSymbol*/
+  .schedule-table-wrapper-capturing {
+    position: absolute;
+    overflow: visible;
+    width: 640px;
+  }
+
+  /*noinspection CssUnusedSymbol*/
+  .schedule-table-wrapper-capturing .setting {
+    display: none;
+  }
+
+  .brand {
+    color: rgba(0, 0, 0, 0.45);
+    white-space: nowrap;
+    position: absolute;
+    line-height: 18px;
+    font-size: 12px;
+    display: block;
+    width: 100%;
+    top: 3px;
+    left: 0;
+  }
+
+  .brand img {
+    height: 18px;
+    width: 18px;
+  }
+</style>

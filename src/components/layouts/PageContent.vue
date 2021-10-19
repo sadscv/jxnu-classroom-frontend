@@ -1,6 +1,6 @@
 <template>
   <a-layout-content class="page-content">
-    <a-spin size="large" tip="正在加载…">
+    <a-spin size="large" tip="正在加载…" :spinning="!$store.state.loaded">
       <a-tabs v-model="activeTab" class="content-tabs" type="card">
         <a-tab-pane v-if="showScheduleTable" tab="课表" key="schedule_table">
         </a-tab-pane>

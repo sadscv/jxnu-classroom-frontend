@@ -8,14 +8,17 @@
     :trigger="null"
     @collapse="handleCollapse"
   >
+    <ClassroomTable @click="$emit('click')" />
   </a-layout-sider>
 </template>
 
 <script>
+import ClassroomTable from '../ClassroomTable';
 
   export default {
     name: 'PageSider',
     components: {
+      ClassroomTable,
     },
     methods: {
       handleCollapse(collapsed) {
