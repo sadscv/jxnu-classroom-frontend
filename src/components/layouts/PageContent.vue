@@ -60,9 +60,6 @@
         <div>
           数据来源: <a href="http://jwc.jxnu.edu.cn/" target="_blank">江西师范大学</a> 版权归江西师范大学所有
         </div>
-        <a-button class="alternate-to-desktop" href="/m.html" type="link" icon="mobile">
-          切换到移动版
-        </a-button>
       </div>
       <a-back-top class="back-top" />
     </a-spin>

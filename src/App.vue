@@ -19,6 +19,7 @@ import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN';
 import PageHeader from './components/layouts/PageHeader';
 import PageSider from './components/layouts/PageSider';
 import PageContent from './components/layouts/PageContent';
+import {dataManagerMixin} from './mixins/common/dataManager';
 
 export default {
   name: 'app',
@@ -27,13 +28,30 @@ export default {
     PageSider,
     PageContent,
   },
-
+  mixins: [dataManagerMixin],
   data() {
     return {
       zh_CN,
       message: '123'
     };
-  }
+  },
+  created() {
+    this.$message.config({
+      top: '11px',
+      maxCount: 1,
+    });
+    this.updateData();
+    addEventListener('storage', this.handleStorage);
+    addEventListener('keydown', this.handleKeydown);
+    clearInterval(this.updateTimer);
+    this.updateTimer = setInterval(() => {
+      this.$store.dispatch('updateAllInfosExtra').then((update) => {
+        if (update) {
+          this.updateData();
+        }
+      });
+    }, 60000000);
+  },
 }
 </script>
 
