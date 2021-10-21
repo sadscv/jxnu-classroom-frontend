@@ -7,7 +7,6 @@
         <tr>
           <td class="header-setting">
             <div ref="setting" :class="{ setting: true, 'setting-show': venueMode }">
-              {{ '123' }}
               <a-dropdown v-if="!venueMode">
                 <a-button shape="circle" size="small" icon="setting" />
                 <a-menu slot="overlay">
@@ -20,23 +19,20 @@
               <img src="../../assets/logo.png" alt="Logo" />
             </div>
           </td>
-          <th class="header-period">&nbsp;</th>
-          <th class="header-week" v-for="week in ['一', '二', '三', '四', '五','六','七']" :key="week">{{ week }}</th>
+          <th class="header-capacity">定员</th>
+          <th class="header-week" v-for="week in ['11', '12','13','14','15','16','17','21','22','23','24','25','26','27','31','32','33','34','35','36','37', '41','42','43','44','45','46','47','51','52','53','54','55','56','57','61','62','63','64','65','66','67','71','72','73','74','75','76','77']" :key="week">{{ week }}</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="(row, index) in rows" :key="index">
-          <th>{{ ['第12节', '第3节', '第4节', '第5节', '第67节', '第89节', '晚上'][index] }}</th>
-          <td class="class-period">
-            <p>{{ classPeriods[index][0] }}</p>
-            <p>- {{ classPeriods[index][1] }}</p>
-          </td>
-          <template v-for="(course, index2) in row">
-            <td v-if="course == null || course.first" :key="index2" :rowspan="course != null ? course.span : 1">
-              <a>*</a>
+<!--          <th>{{ ['第12节', '第3节', '第4节', '第5节', '第67节', '第89节', '晚上'][index] }}</th>-->
+          <th> {{ index }}</th>
+          <td> {{ row['capacity']}} </td>
+          <template v-for="(course, index2) in row['usage']">
+            <td :key="index2">
+              <a>{{ row['usage']['index2'] }}</a>
               <ClassCard :course="course" v-if="course != null && !course.qr" :venue="venueMode"
                          @click.native="handleClassCardClick(course.courseId)" />
-              <QrCard v-if="course != null && course.qr" />
             </td>
           </template>
           <!--<template v-for="(course, index2) in row">-->
@@ -57,13 +53,11 @@
 
 <script>
   import ClassCard from './ClassCard';
-  import QrCard from './QrCard';
   import {ClassroomTableMixin} from '../../mixins/ClassroomTable';
 
   export default {
     name: 'ClassroomTable',
     components: {
-      QrCard,
       ClassCard,
     },
     mixins: [ClassroomTableMixin],
@@ -86,12 +80,27 @@
     font-size: 13px;
   }
 
+  .schedule-table thead{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: white;
+    /*color: white;*/
+    opacity: 1;
+  }
+
   .schedule-table thead tr {
     height: 32px;
   }
 
   .schedule-table tbody tr {
-    height: 100px;
+    height: 10px;
+  }
+
+  .schedule-table tbody th {
+    width: 130px;
+    text-overflow: clip;
+    overflow: hidden;
   }
 
   .schedule-table tbody tr:nth-child(odd) {
@@ -122,11 +131,11 @@
 
   .header-setting {
     position: relative;
-    width: 28px;
+    width: 60px;
   }
 
-  .header-period {
-    width: 60px;
+  .header-capacity {
+    width: 40px;
   }
 
   .header-week {

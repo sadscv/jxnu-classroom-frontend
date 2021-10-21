@@ -4,9 +4,7 @@
       <a-tabs v-model="activeTab" class="content-tabs" type="card">
         <a-tab-pane v-if="showScheduleTable" tab="课表" key="schedule_table">
         </a-tab-pane>
-        <a-tab-pane :tab="`待排()`" key="reserved">
-        </a-tab-pane>
-        <a-tab-pane tab="课程检索" key="lookup">
+        <a-tab-pane tab="检索" key="lookup">
           <LookupPanel />
         </a-tab-pane>
 
@@ -18,7 +16,7 @@
                 def{{ selectedCollege }}
               </a>
               <a v-else>
-                选择学院
+                选择楼栋
               </a>
             <a-icon type="down" />
           </a-button>
@@ -27,13 +25,6 @@
             </a-menu>
         </a-dropdown>
 
-        <a-dropdown slot="tabBarExtraContent"  :getTooltipCotainer="trigger => trigger.parentNode">
-          <a-button class="ant-dropdown-link" @click="e => e.preventDefault()">
-            <a-icon type="down" />
-          </a-button>
-          <a-menu slot="overlay">
-          </a-menu>
-        </a-dropdown>
 
         <!--<a-dropdown-button slot="tabBarExtraContent" class="tabs-actions" @click="quickInputting">-->
           <!--<a-icon type="rocket" />-->
@@ -79,19 +70,19 @@
 </template>
 
 <script>
-  // import Vue from 'vue';
+  import LookupPanel from '../LookupPanel';
 
   export default {
     name: 'PageContent',
-    // components: {
-    //   BackupAndRestoreDialog,
-    //   ColorSeedDialog,
-    //   ExportDialog,
-    //   LookupPanel,
-    //   ReservedClassesList,
-    //   ScheduleTable,
-    //   SaveImageDialog,
-    // },
+    components: {
+      LookupPanel,
+      // BackupAndRestoreDialog,
+      // ColorSeedDialog,
+      // ExportDialog,
+      // ReservedClassesList,
+      // ScheduleTable,
+      // SaveImageDialog,
+    },
     props: {
       showScheduleTable: {
         type: Boolean,
@@ -124,7 +115,7 @@
   .page-content {
     min-height: calc(100vh - 64px);
     transition: all 0.2s ease;
-    margin: 64px 0 0 600px;
+    margin: 64px 0 0 1200px;
     padding: 8px;
   }
 

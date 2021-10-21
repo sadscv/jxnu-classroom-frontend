@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import Storage from './storage';
 
 
 Vue.use(Vuex);
@@ -12,18 +13,22 @@ export default new Vuex.Store({
     trimester: null, // 持久化
     backend: null, // 持久化
     showIntroductionNotification: true,
-    allClassroom : null,
+    allClassroom : {},
     allClassroomHash: null,
     allInfosExtra: null,
     allInfosExtraUpdateTime: null,
   },
   getters: {
-    scheduleTableRows() {
+    ClassroomTableRows(state) {
       // 课程表格
       let rows = [];
-      for (let i = 0; i < 7; i++) {
-        rows.push([null,null,null,null,null,null,null])
-      }
+      rows = state.allClassroom
+      // for (let i = 0; i < 7; i++) {
+      //   rows.push([null,null,null,null,null,null,null])
+      // }
+      // for (let classroomId in state.allClassroom) {
+          // window.console.log(state.allClassroom[classroomId]['usage'])
+      // }
       return rows;
     },
   },
@@ -33,6 +38,9 @@ export default new Vuex.Store({
     },
     TRIMESTER(state, value) {
       state.trimester = value;
+    },
+    BACKEND(state, value) {
+      state.backend = value;
     },
     IGNORE_INTRODUCTION_NOTIFICATION(state) {
       state.showIntroductionNotification = false;
@@ -53,7 +61,7 @@ export default new Vuex.Store({
   actions: {
     updateAllClassroomInfo(context) {
       return new Promise((resolve, reject) => {
-        axios.get(apiConfig.getClassroomApi()).then((response) => {
+        axios.get(apiConfig.getClassroomApi).then((response) => {
             context.state.flaskCourse = response.data;
             context.commit('GET_CLASSROOM', response.data);
             Storage.set('allClassroom', response.data).then(() => resolve());
@@ -73,6 +81,7 @@ export default new Vuex.Store({
             context.commit('TRIMESTER', response.data['trimester']);
             tasks.push(Storage.set('trimester', response.data['trimester']));
           }
+
           if (response.data['backend'] !== context.state.backend) {
             context.commit('BACKEND', response.data['backend']);
             tasks.push(Storage.set('backend', response.data['backend']));

@@ -1,7 +1,7 @@
 <template>
   <a-layout-sider
     class="page-sider"
-    width="600px"
+    width="1200px"
     theme="light"
     breakpoint="lg"
     collapsed-width="0"

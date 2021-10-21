@@ -25,12 +25,12 @@ export const ClassroomTableMixin = {
   },
   computed: {
     rows() {
-      let rows = JSON.parse(JSON.stringify(this.$store.getters.scheduleTableRows));
-      [6, 5, 4, 3, 2, 1, 0].forEach((j) => {
-          [6, 5, 4, 3, 2, 1, 0].forEach((i) => {
-            rows[i][j] = null;
-        });
-      });
+      return JSON.parse(JSON.stringify(this.$store.getters.ClassroomTableRows));
+      // [6, 5, 4, 3, 2, 1, 0].forEach((j) => {
+      //     [6, 5, 4, 3, 2, 1, 0].forEach((i) => {
+      //       rows[i][j] = null;
+      //   });
+      // });
     }
 
   },

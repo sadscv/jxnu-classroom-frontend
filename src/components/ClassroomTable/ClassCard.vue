@@ -1,43 +1,10 @@
 <template>
   <div :class="_class" :style="style"
        @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
-      <div class="course-name"><strong>{{course.courseName }}</strong></div>
-      <div v-if="Object.keys(infos).length > 1">
-          <div v-for="(value, key) in infos" :key="key">
-              <div class="course-name" v-if="key !== course.courseName">
-                  <br>
-                  <strong> {{key }} </strong>
-              </div>
-          </div>
-      </div>
-      <div v-else>
-          <!--<span>test</span>-->
-          <div v-if="course.isPreview === false && Object.keys(infos).length > 0">
-              <div v-if="!venue">
-                  <span class="teacher-name-venue" v-for="(value, key) in infos"
-                        :key="key">
-                <div v-for="teacherName in value" :key="teacherName">
-                    {{ '| ' + teacherName}}
-                </div>
-              </span>
-              </div>
-              <div class="venue" v-else>
-                  <span class="venue-at">@</span>{{
-                  $store.getters.extra(`${course.courseId}-${course.teacherId}`).venue
-                  }}
-              </div>
-          </div>
-          <div v-else-if="course.isPreview === true">
-              <div class="teacher-name-venue" v-if="!venue">
-                  {{course.teacherName}}
-              </div>
-          </div>
-      </div>
+      <div class="course-name"><strong>{{course}}</strong></div>
+  </div>
 
       <!--<div v-if="Object.keys(course.conflicted).length === 0">-->
-
-
-  </div>
 </template>
 
 <script>
@@ -47,7 +14,7 @@
     name: 'ClassCard',
     props: {
       course: {
-        type: Object,
+        type: String,
       },
       courses: {
         type: Array,
@@ -103,8 +70,11 @@
   .course-name {
     margin-bottom: 1px;
     line-height: 1;
-    font-size: 10px;
-    color: rgba(255, 255, 255, 1);
+    font-size: 5px;
+    color: rgba(0, 0, 0, 1);
+    max-width: 15px;
+    text-overflow: clip;
+    overflow: hidden;
   }
 
   .teacher-name-venue {
