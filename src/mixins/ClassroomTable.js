@@ -35,6 +35,9 @@ export const ClassroomTableMixin = {
 
   },
   methods: {
+    handleClassCardClick() {
+      this.$emit('click');
+    },
   },
 };
 
@@ -44,6 +47,12 @@ export const ClassCardMixin = {
       return {
         color: 'rgba(255, 255, 255, 0.95)',
       };
+    },
+    _class() {
+      return {
+        'class-card': true,
+        'class-card-hover': this.isHover,
+      }
     },
   },
   methods: {

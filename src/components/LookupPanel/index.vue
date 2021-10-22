@@ -9,13 +9,14 @@
       :locale="{emptyText: '没有匹配的记录'}"
       :pagination="{position: 'both', showTotal: total => `${total} 条记录`}"
     >
-      <a-table-column title="教室" data-index="course">
-        <template v-slot="course">
+      <a-table-column title="教室" data-index="classroom">
+        <template v-slot="classroom">
           <a target="_blank" rel="external nofollow">
-            <strong>{{ course.name }}</strong>
+<!--            <strong>{{ // classroom.capacity }}</strong>-->
+            <strong>{{ classroom.id }}</strong>
+<!--            <small class="id-info teacher-id-info">{{ classroom.row}}</small>-->
           </a>
           <br />
-          <small class="id-info">{{ course.id }}</small>
         </template>
       </a-table-column>
       <!--suppress HtmlDeprecatedAttribute -->
@@ -31,7 +32,7 @@
   export default {
     name: 'LookupPanel',
     components: {
-        ATableColumn,
+      ATableColumn,
       LookupConditions,
     },
     methods: {
@@ -40,7 +41,7 @@
         return new Promise((() => {
         })
       )
-    }
+      }
     },
     mixins: [LookupPanelMixin],
   };

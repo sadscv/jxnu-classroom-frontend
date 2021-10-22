@@ -10,13 +10,16 @@
   "dependencies": {
     "ant-design-vue": "^1.7.8",
     "axios": "^0.23.0",
+    "babel-plugin-import": "^1.13.3",
     "core-js": "^3.18.3",
     "localforage": "^1.10.0",
     "pako": "^2.0.4",
+    "promise-worker": "^2.0.1",
     "v-viewer": "^1.6.4",
     "vue": "^2.6.11",
     "vue-clipboard2": "^0.3.3",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "worker-plugin": "^5.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

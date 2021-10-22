@@ -1,6 +1,7 @@
 <template>
   <div :class="_class" :style="style"
-       @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+  >
+    <!--       @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"-->
       <div class="course-name"><strong>{{course}}</strong></div>
   </div>
 

@@ -32,7 +32,7 @@
             <td :key="index2">
               <a>{{ row['usage']['index2'] }}</a>
               <ClassCard :course="course" v-if="course != null && !course.qr" :venue="venueMode"
-                         @click.native="handleClassCardClick(course.courseId)" />
+                         @click.native="handleClassCardClick()" />
             </td>
           </template>
           <!--<template v-for="(course, index2) in row">-->

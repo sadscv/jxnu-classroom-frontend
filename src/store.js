@@ -45,7 +45,7 @@ export default new Vuex.Store({
     IGNORE_INTRODUCTION_NOTIFICATION(state) {
       state.showIntroductionNotification = false;
     },
-    GET_CLASSROOM(state, value) {
+    ALL_CLASSROOM(state, value) {
       state.allClassroom = value;
     },
     ALL_INFO(state, value) {
@@ -62,9 +62,13 @@ export default new Vuex.Store({
     updateAllClassroomInfo(context) {
       return new Promise((resolve, reject) => {
         axios.get(apiConfig.getClassroomApi).then((response) => {
-            context.state.flaskCourse = response.data;
-            context.commit('GET_CLASSROOM', response.data);
-            Storage.set('allClassroom', response.data).then(() => resolve());
+            let classrooms = response.data;
+            window.console.log(response.data);
+            for (let key in classrooms) {
+              classrooms[key]['class_id'] = key;
+            }
+            context.commit('ALL_CLASSROOM', classrooms);
+            Storage.set('allClassroom', classrooms).then(() => resolve());
         }).catch(() => {
             reject();
         })
