@@ -8,53 +8,39 @@ function concatRegExp(parts) {
 }
 
 registerPromiseWorker(function (message) {
-
-
   const isNumberGreater= (data, condition) => {
     let conditionNumber = parseInt(condition);
     if (Number.isInteger(conditionNumber) && conditionNumber > 0) {
-      if (message.allClassroom.hasOwn(data['class_id'])) {
-        let capacity = parseInt(message.allClassroom[`${data['class_id']}`]['capacity']);
-        return capacity <= conditionNumber;
+      if (data['classroom_id'] in message.allClassroom) {
+        let capacity = parseInt(message.allClassroom[`${data['classroom_id']}`]['capacity']);
+        return capacity >= conditionNumber;
       }
     }
-    return false;
+    return ;
   };
-  // const isNumberExceeded = (data, condition) => {
-  //   let conditionNumber = parseInt(condition);
-  //   if (Number.isInteger(conditionNumber) && conditionNumber > 0) {
-  //     if (message.allClassesExtra.hasOwnProperty(`${data['course_id']}-${data['teacher_id']}`)) {
-  //       let capacity = parseInt(message.allClassesExtra[`${data['course_id']}-${data['teacher_id']}`].capacity);
-  //       let number = parseInt(message.allClassesExtra[`${data['course_id']}-${data['teacher_id']}`].number);
-  //       if (Number.isInteger(capacity) && Number.isInteger(number)) {
-  //         return capacity - number < conditionNumber;
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // };
-  // const getConflicts = (courseId, classTime) => {
-  //   let courseConflicts = {};
-  //   getPeriods(classTime).forEach((period) => {
-  //     let targetCell = message.scheduleTableRows[period[0]][period[1]];
-  //     if (targetCell !== null && targetCell.courseId !== courseId) {
-  //       courseConflicts[targetCell.courseId] = true;
-  //     }
-  //   });
-  //   return courseConflicts;
-  // };
+
+  const isEmpty = (data, condition) => {
+      let usedTime = condition;
+      let allTimeslot = data['usage'];
+      console.log(usedTime, allTimeslot)
+    return ;
+  }
+
   let rows = [];
   let conditionsRegExp = {};
+  console.log(message.conditions);
   for (let condition in message.conditions.search) {
     if ( condition in message.conditions.search) {
       conditionsRegExp[condition] = concatRegExp(message.conditions.search[condition].split(/\s+/))
     }
   }
 
-  for (let key in message.allClassroom) {
+  // for (let key in message.allClassroom) {
+   Object.keys(message.allClassroom).forEach((key) => {
     let row = message.allClassroom[key]
-    if (isNumberGreater(message.allClassroom[key], message.conditions.number))
+    if (isNumberGreater(message.allClassroom[key], message.conditions.capacity))
       return;
+    if (isEmpty(message.allClassroom[key], message.conditions.class_time))
     for (let condition in conditionsRegExp) {
       if ( condition in conditionsRegExp) {
         if (!conditionsRegExp[condition].test(message.allClassroom[key][condition])) {
@@ -62,14 +48,16 @@ registerPromiseWorker(function (message) {
         }
       }
     }
+
     let newRow = Object.assign({}, row);
     newRow['classroom'] = {
       row: row,
-      id: newRow['class_id'],
+      classroom_id: newRow['classroom_id'],
       capacity: newRow['capacity'],
+      building: newRow['building'],
     };
     rows.push(newRow);
-  }
+  })
   // message.allClassroom.forEach((row) => {
   //   if (isNumberGreater(row, message.conditions.number)) {
   //     return;

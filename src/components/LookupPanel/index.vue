@@ -9,12 +9,11 @@
       :locale="{emptyText: '没有匹配的记录'}"
       :pagination="{position: 'both', showTotal: total => `${total} 条记录`}"
     >
-      <a-table-column title="教室" data-index="classroom">
+      <a-table-column title="教室列表" data-index="classroom">
         <template v-slot="classroom">
           <a target="_blank" rel="external nofollow">
 <!--            <strong>{{ // classroom.capacity }}</strong>-->
-            <strong>{{ classroom.id }}</strong>
-<!--            <small class="id-info teacher-id-info">{{ classroom.row}}</small>-->
+            <strong>{{ classroom.classroom_id }} | </strong>{{classroom.capacity}}座 | <small>{{classroom.building}}</small>
           </a>
           <br />
         </template>

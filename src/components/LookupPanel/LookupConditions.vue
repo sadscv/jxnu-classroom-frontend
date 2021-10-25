@@ -5,28 +5,54 @@
         <a-input class="w-100px" v-model="conditions.search['classroom_id']" allow-clear />
       </a-form-item>
       <a-form-item label="上课时间">
-        <a-input class="w-100px" v-model="conditions.search['class_time']" allow-clear />
+        <a-tree-select v-model="conditions.class_time" class="w-140px" :tree-data="treeData" tree-checkable :show-checked-strategy="SHOW_PARENT" placeholder="Please select" ></a-tree-select>
+<!--        <MultipleCascader  v-model="conditions.search['class_time']" allow-clear />-->
+<!--        <a-input class="w-100px" v-model="conditions.search['class_time']" allow-clear />-->
       </a-form-item>
-      <a-form-item label="校区">
-        <a-select v-model="conditions.search['campus']">
-          <a-select-option value="">全部</a-select-option>
-          <a-select-option value="瑶湖">瑶湖</a-select-option>
-          <a-select-option value="青山湖">青山湖</a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item label="容量不低于">
-        <a-input-number class="w-80px" v-model.number="conditions.number" placeholder="不限" :min="0" :max="9999" />
-      </a-form-item>
+
+<!--      <a-form-item label="容量不低于">-->
+<!--        <a-input-number class="w-80px" v-model.number="conditions.capacity" placeholder="不限" :min="0" :max="9999" />-->
+<!--      </a-form-item>-->
     </a-form>
   </a-card>
 </template>
 
 <script>
   import {LookupConditionsMixin} from '../../mixins/LookupPanel';
+  import {TreeSelect} from "ant-design-vue";
+  const SHOW_PARENT = TreeSelect.SHOW_PARENT;
 
   export default {
     name: 'LookupConditions',
+    components: {},
     mixins: [LookupConditionsMixin],
+    data() {
+      return {
+        treeData : [],
+        value: [],
+        SHOW_PARENT,
+      };
+    },
+
+    created() {
+    ['一', '二', '三', '四', '五', '六', '日'].forEach((week, index1) => {
+      let weekData = {
+        title: '周'+week,
+        value: index1+1,
+        key: '周'+week,
+        children: [],
+      };
+      ['12节', '3节', '4节', '5节', '67节', '89节', '晚上'].forEach((date, index2) => {
+        let childData = {
+          title: '周'+week+date,
+          value: (index1+1).toString()+(index2+1).toString(),
+          key: '周'+week+date,
+        }
+        weekData['children'].push(childData)
+      })
+      this.treeData.push(weekData);
+    })
+    }
   };
 </script>
 

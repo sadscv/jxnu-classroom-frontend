@@ -55,19 +55,18 @@ export const LookupConditionsMixin = {
       conditions: {
         search: {
           'classroom_id': '',
-          'class_time': '',
-          'campus': '',
+          'building': '',
         },
-        displayOption: 0,
-        number: '',
+        capacity: '',
+        class_time: [],
       },
     };
   },
   watch: {
     conditions: {
       handler() {
-        if (this.conditions.number === '0' || this.conditions.number === 0 || parseInt(this.conditions.number) === 0) {
-          this.conditions.number = '';
+        if (this.conditions.capacity === '0' || this.conditions.capacity === 0 || parseInt(this.conditions.capacity) === 0) {
+          this.conditions.capacity = '';
         }
         this.$emit('filter');
       },

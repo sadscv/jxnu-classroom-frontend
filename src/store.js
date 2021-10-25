@@ -65,7 +65,7 @@ export default new Vuex.Store({
             let classrooms = response.data;
             window.console.log(response.data);
             for (let key in classrooms) {
-              classrooms[key]['class_id'] = key;
+              classrooms[key]['classroom_id'] = key;
             }
             context.commit('ALL_CLASSROOM', classrooms);
             Storage.set('allClassroom', classrooms).then(() => resolve());
