@@ -10,6 +10,8 @@ export const LookupPanelMixin = {
     };
   },
   mounted() {
+
+
     this.promiseWorker = new PromiseWorker(new Worker('../workers/filter.js', {type: 'module'}));
     this.filter(this.$refs.conditions.conditions).then((rows) => {
       this.rows = rows;
@@ -27,12 +29,16 @@ export const LookupPanelMixin = {
   },
   methods: {
     countdown(delay) {
+      let tmp_conditions =JSON.parse(JSON.stringify(this.$refs.conditions.conditions));
+      if (this.$refs.conditions.conditions.class_time['date']) {
+        tmp_conditions.class_time['date'] = this.$refs.conditions.conditions.class_time['date'].toDate();
+      }
       this.storageBusy = true;
       if (this.timer !== null) {
         clearTimeout(this.timer);
       }
       this.timer = setTimeout(() => {
-        this.filter(this.$refs.conditions.conditions).then((rows) => {
+        this.filter(tmp_conditions).then((rows) => {
           this.rows = rows;
           this.storageBusy = false;
         });
@@ -58,7 +64,10 @@ export const LookupConditionsMixin = {
           'building': '',
         },
         capacity: '',
-        class_time: [],
+        class_time: {
+          date: null,
+          timeslot: null,
+        },
       },
     };
   },

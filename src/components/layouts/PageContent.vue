@@ -90,7 +90,7 @@
     },
     data() {
       return {
-        activeTab: 'reserved',
+        activeTab: 'lookup',
         quickInputtingWindow: null,
         exportDialogVisible: false,
         backupAndRestoreDialogVisible: false,

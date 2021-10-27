@@ -7,7 +7,7 @@
       class="table"
       :data-source="rows"
       :locale="{emptyText: '没有匹配的记录'}"
-      :pagination="{position: 'both', showTotal: total => `${total} 条记录`}"
+      :pagination="{position: 'bottom', showTotal: total => `${total} 条记录`}"
     >
       <a-table-column title="教室列表" data-index="classroom">
         <template v-slot="classroom">
@@ -18,7 +18,62 @@
           <br />
         </template>
       </a-table-column>
-      <!--suppress HtmlDeprecatedAttribute -->
+      <a-table-column data-index="action" width="160px">
+        <div slot="title" class="about-data-wrapper">
+          <a-popover placement="leftBottom">
+            <div slot="content" class="about-data">
+              所有数据<strong>【非实时】</strong>，视情况可能存在高达数日的误差，仅供参考。<br />
+              更新时间：
+              <a-tag>
+                <a-icon type="clock-circle" />
+                <a-divider type="vertical" />
+                <span>{{ new Date($store.state.allClassesExtraUpdateTime).toLocaleString() }}</span>
+              </a-tag>
+              数据HASH：
+              <a-tag>
+                <a-icon type="tag" />
+                <a-divider type="vertical" />
+                <span>{{ $store.state.allClassesHash }}</span>
+              </a-tag>
+            </div>
+            <a-button size="small" type="link" icon="info-circle">说明</a-button>
+          </a-popover>
+        </div>
+        <template>
+          <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
+          <a-dropdown-button
+            type="primary"
+            :disabled="storageBusy"
+          >
+            <a-icon type="plus-circle" />
+            待排
+            <a-menu slot="overlay">
+              <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
+              <a-menu-item>
+                <template>加入待排并选择</template>
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown-button>
+          <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
+          <a-dropdown-button
+            type="dashed"
+            :disabled="storageBusy"
+          >
+            <a-icon type="minus-circle" />
+            待排
+            <a-menu slot="overlay">
+              <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
+              <a-menu-item >
+                回到待排状态
+              </a-menu-item>
+              <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
+              <a-menu-item>
+                <template>选择此待排课</template>
+              </a-menu-item>
+            </a-menu>
+        </a-dropdown-button>
+        </template>
+      </a-table-column>
     </a-table>
   </div>
 </template>

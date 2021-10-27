@@ -5,22 +5,24 @@
         <a-input class="w-100px" v-model="conditions.search['classroom_id']" allow-clear />
       </a-form-item>
       <a-form-item label="选择日期">
-            <a-date-picker
-      format="YYYY-MM-DD"
-      :disabled-date="disabledDate"
-      class="w-140px"
-      v-model="conditions.search['date']"
-    />
+        <a-date-picker format="YYYY-MM-DD"
+                       :disabled-date="disabledDate"
+                       class="w-140px"
+                       v-model="conditions.class_time.date"
+        />
       </a-form-item>
+<!--      <a-form-item v-if="conditions.date">-->
+<!--        星期{{['日','一', '二', '三', '四', '五', '六'][conditions.class_time.date.day()]}}-->
+<!--      </a-form-item>-->
       <a-form-item label="上课时间">
-        <a-tree-select v-model="conditions.class_time" class="w-140px" :tree-data="treeData" tree-checkable :show-checked-strategy="SHOW_PARENT" placeholder="Please select" ></a-tree-select>
+        <a-tree-select v-model="conditions.class_time.timeslot" class="w-140px" :tree-data="treeData" tree-checkable :show-checked-strategy="SHOW_PARENT" placeholder="Please select" ></a-tree-select>
 <!--        <MultipleCascader  v-model="conditions.search['class_time']" allow-clear />-->
 <!--        <a-input class="w-100px" v-model="conditions.search['class_time']" allow-clear />-->
       </a-form-item>
 
-<!--      <a-form-item label="容量不低于">-->
-<!--        <a-input-number class="w-80px" v-model.number="conditions.capacity" placeholder="不限" :min="0" :max="9999" />-->
-<!--      </a-form-item>-->
+      <a-form-item label="容量大于">
+        <a-input-number class="w-80px" v-model.number="conditions.capacity" placeholder="不限" :min="0" :max="9999" />
+      </a-form-item>
     </a-form>
   </a-card>
 </template>
@@ -29,6 +31,7 @@
   import {LookupConditionsMixin} from '../../mixins/LookupPanel';
   import {TreeSelect} from "ant-design-vue";
   import moment from 'moment';
+  import 'moment/locale/zh-cn';
 
   const SHOW_PARENT = TreeSelect.SHOW_PARENT;
 
@@ -67,21 +70,13 @@
     },
 
     created() {
-    ['一', '二', '三', '四', '五', '六', '日'].forEach((week, index1) => {
+      ['12节', '3节', '4节', '5节', '67节', '89节', '10-12节','午间(12:20-13:50)', '晚间(17:20-18:50)'].forEach((timeslot, index) => {
       let weekData = {
-        title: '周'+week,
-        value: index1+1,
-        key: '周'+week,
+        title: timeslot,
+        value: index,
+        key: index,
         children: [],
       };
-      ['12节', '3节', '4节', '5节', '67节', '89节', '晚上'].forEach((date, index2) => {
-        let childData = {
-          title: '周'+week+date,
-          value: (index1+1).toString()+(index2+1).toString(),
-          key: '周'+week+date,
-        }
-        weekData['children'].push(childData)
-      })
       this.treeData.push(weekData);
     })
     }
