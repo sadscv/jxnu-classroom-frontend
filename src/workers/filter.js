@@ -8,6 +8,9 @@ function concatRegExp(parts) {
 }
 
 registerPromiseWorker(function (message) {
+  const isReserved = (data) => {
+    return data['classroom_id'] in message.reservedClassroom;
+  }
   const isNumberGreater= (data, condition) => {
     let conditionNumber = parseInt(condition);
     if (Number.isInteger(conditionNumber) && conditionNumber > 0) {
@@ -25,7 +28,6 @@ registerPromiseWorker(function (message) {
           let empty_flag = false;
           condition.timeslot.forEach((ts)=> {
             if (parseInt(ts)<7 && data['usage'][week*7+parseInt(ts)] !== null) {
-              console.log(data['usage'][week*7+parseInt(ts)])
               empty_flag = true;
             }
           })
@@ -65,6 +67,10 @@ registerPromiseWorker(function (message) {
       capacity: newRow['capacity'],
       building: newRow['building'],
     };
+    newRow['action'] = {
+      row: row,
+      isReserved: isReserved(row),
+    }
     rows.push(newRow);
   })
   return rows;

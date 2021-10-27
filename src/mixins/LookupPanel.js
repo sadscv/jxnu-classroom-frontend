@@ -47,11 +47,16 @@ export const LookupPanelMixin = {
     filter(conditions) {
       return this.promiseWorker.postMessage({
         allClassroom: this.$store.state.allClassroom,
+        reservedClassroom: this.$store.state.reservedClassroom,
         classroomTableRows: this.$store.getters.ClassroomTableRows,
         classList: this.$store.state.classList,
         conditions,
       });
     },
+    reserveClassroom(data) {
+      this.storageBusy = true;
+
+    }
   },
 };
 

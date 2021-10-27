@@ -17,6 +17,7 @@ export default new Vuex.Store({
     allClassroomHash: null,
     allInfosExtra: null,
     allInfosExtraUpdateTime: null,
+    reservedClassroom: {}, // 持久化
   },
   getters: {
     ClassroomTableRows(state) {
@@ -119,6 +120,38 @@ export default new Vuex.Store({
         });
       });
     },
+    reserveClassroom(context, data) {
+      // 添加待选课程
+      return new Promise((resolve) => {
+        let copy = JSON.parse(JSON.stringify(context.state.reservedClassroom));
+        // 如果待选课程中没有这个课程号，就在待选课程中增设一个。包含courseName，credit，classes
+        // reservedClasses 目前已选的课程？
+        if (!(data['classroom_id'] in copy)) {
+          copy[data['classroom_id']] = {
+            id: data['classroom_id'],
+          };
+        }
+        copy[data['course_id']].classes[data['class_id']] = {
+          campus: data['campus'],
+          courseId: data['course_id'],
+          classTime: data['class_time'],
+          teacherId: data['teacher_id'],
+          teacherName: data['teacher_name'],
+          classId: data['class_id'],
+          className: data['class_name'],
+          classStatus: data['class_status'],
+        };
+        context.commit('RESERVED_CLASSES', copy);
+        context.commit('HISTORY_PUSH', {
+          data: context.getters.currentData,
+          msg: `添加待选 ${data['course_name']} (${data['teacher_name']})`,
+        });
+        Storage.set('reservedClasses', copy).then(() => {
+          resolve();
+        });
+      });
+    },
+
   },
 });
 

@@ -27,35 +27,32 @@
               <a-tag>
                 <a-icon type="clock-circle" />
                 <a-divider type="vertical" />
-                <span>{{ new Date($store.state.allClassesExtraUpdateTime).toLocaleString() }}</span>
-              </a-tag>
-              数据HASH：
-              <a-tag>
-                <a-icon type="tag" />
-                <a-divider type="vertical" />
-                <span>{{ $store.state.allClassesHash }}</span>
+                <span>123</span>
+<!--                <span>{{ new Date($store.state.allClassesExtraUpdateTime).toLocaleString() }}</span>-->
               </a-tag>
             </div>
             <a-button size="small" type="link" icon="info-circle">说明</a-button>
           </a-popover>
         </div>
-        <template>
+        <template v-slot="action">
           <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
           <a-dropdown-button
+            v-if="!action.isReserved"
             type="primary"
             :disabled="storageBusy"
           >
             <a-icon type="plus-circle" />
-            待排
+            选择
             <a-menu slot="overlay">
               <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
-              <a-menu-item>
-                <template>加入待排并选择</template>
+              <a-menu-item @click="reserveClassroom(action.row)">
+                <template>选择并提交</template>
               </a-menu-item>
             </a-menu>
           </a-dropdown-button>
           <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
           <a-dropdown-button
+            v-else
             type="dashed"
             :disabled="storageBusy"
           >
