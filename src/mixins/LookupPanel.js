@@ -10,16 +10,14 @@ export const LookupPanelMixin = {
     };
   },
   mounted() {
-
-
     this.promiseWorker = new PromiseWorker(new Worker('../workers/filter.js', {type: 'module'}));
     this.filter(this.$refs.conditions.conditions).then((rows) => {
       this.rows = rows;
     });
   },
   watch: {
-    '$store.state.allClassroom'() {
-      this.countdown(0, false); // 避免重复执行筛选
+    '$store.state.reservedClassroom'() {
+      this.countdown(0); // 避免重复执行筛选
     },
   },
   beforeDestroy() {
@@ -53,10 +51,16 @@ export const LookupPanelMixin = {
         conditions,
       });
     },
-    reserveClassroom(data) {
+    selectClassroom(data, select) {
       this.storageBusy = true;
+      this.$store.dispatch(select ? 'reserveClassroomThenSelect' : 'reserveClassroom', data);
+    },
+    unselectClassroom(data) {
+      console.log(data);
+      this.storageBusy = true;
+      this.$store.dispatch('unselectClassroom', data);
+    },
 
-    }
   },
 };
 

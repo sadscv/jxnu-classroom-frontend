@@ -8,7 +8,7 @@ function concatRegExp(parts) {
 }
 
 registerPromiseWorker(function (message) {
-  const isReserved = (data) => {
+  const isSelected = (data) => {
     return data['classroom_id'] in message.reservedClassroom;
   }
   const isNumberGreater= (data, condition) => {
@@ -69,7 +69,7 @@ registerPromiseWorker(function (message) {
     };
     newRow['action'] = {
       row: row,
-      isReserved: isReserved(row),
+      isSelected: isSelected(row),
     }
     rows.push(newRow);
   })

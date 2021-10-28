@@ -2,6 +2,21 @@
   <div class="lookup-panel-wrapper">
     <LookupConditions ref="conditions" @filter="countdown(300, true)" />
     <!--suppress JSUnusedGlobalSymbols -->
+    <a-divider />
+    <div slot="content" class="selected-classroom">
+      <strong>已选教室：</strong>
+      <a-tag
+          v-for="room in getSelectedClassroom()"
+          :key="room"
+          color="red"
+          closable
+          @close="unselectClassroom(room.id)"
+      >
+        {{room.id}}
+      </a-tag>
+      <a-button type="primary" >提交</a-button>
+    </div>
+    <a-divider />
     <a-table
       ref="table"
       class="table"
@@ -9,7 +24,7 @@
       :locale="{emptyText: '没有匹配的记录'}"
       :pagination="{position: 'bottom', showTotal: total => `${total} 条记录`}"
     >
-      <a-table-column title="教室列表" data-index="classroom">
+      <a-table-column title="可用教室列表" data-index="classroom">
         <template v-slot="classroom">
           <a target="_blank" rel="external nofollow">
 <!--            <strong>{{ // classroom.capacity }}</strong>-->
@@ -18,6 +33,8 @@
           <br />
         </template>
       </a-table-column>
+<!--      <a-table-column  :title="$store.state.reservedClassroom"  width="220px">-->
+<!--      </a-table-column>-->
       <a-table-column data-index="action" width="160px">
         <div slot="title" class="about-data-wrapper">
           <a-popover placement="leftBottom">
@@ -37,15 +54,16 @@
         <template v-slot="action">
           <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
           <a-dropdown-button
-            v-if="!action.isReserved"
+            v-if="!action.isSelected"
             type="primary"
             :disabled="storageBusy"
+            @click="selectClassroom(action.row, false)"
           >
             <a-icon type="plus-circle" />
             选择
             <a-menu slot="overlay">
               <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
-              <a-menu-item @click="reserveClassroom(action.row)">
+              <a-menu-item @click="selectClassroom(action.row, true)">
                 <template>选择并提交</template>
               </a-menu-item>
             </a-menu>
@@ -55,24 +73,22 @@
             v-else
             type="dashed"
             :disabled="storageBusy"
+            @click="unselectClassroom(action.row['classroom_id'])"
           >
             <a-icon type="minus-circle" />
-            待排
-            <a-menu slot="overlay">
+            已选
+            <a-menu slot="overlay" >
               <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
-              <a-menu-item >
-                回到待排状态
-              </a-menu-item>
-              <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
-              <a-menu-item>
-                <template>选择此待排课</template>
+              <a-menu-item v-if="action.isSelected" @click="unselectClassroom(action.row['classroom_id'])">
+                <template> 取消选择 </template>
               </a-menu-item>
             </a-menu>
         </a-dropdown-button>
         </template>
       </a-table-column>
     </a-table>
-  </div>
+
+    </div>
 </template>
 
 <script>
@@ -92,8 +108,13 @@
         return new Promise((() => {
         })
       )
-      }
+      },
+      getSelectedClassroom() {
+        window.console.log(this.$store.state.reservedClassroom);
+        return this.$store.state.reservedClassroom;
+      },
     },
+
     mixins: [LookupPanelMixin],
   };
 </script>
@@ -189,8 +210,14 @@
     text-align: right;
   }
 
+
   .about-data {
     line-height: 2;
+  }
+
+  .selected-classroom {
+    line-height: 2;
+    margin-left: 15px;
   }
 
   .course-intro-link {
