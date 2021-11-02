@@ -1,9 +1,6 @@
 <template>
   <a-card class="lookup-conditions" size="small">
     <a-form ref="form" layout="inline">
-      <a-form-item label="教室号">
-        <a-input class="w-100px" v-model="conditions.search['classroom_id']" allow-clear />
-      </a-form-item>
       <a-form-item label="选择日期">
         <a-date-picker format="YYYY-MM-DD"
                        :disabled-date="disabledDate"
@@ -19,9 +16,11 @@
 <!--        <MultipleCascader  v-model="conditions.search['class_time']" allow-clear />-->
 <!--        <a-input class="w-100px" v-model="conditions.search['class_time']" allow-clear />-->
       </a-form-item>
-
       <a-form-item label="容量大于">
         <a-input-number class="w-80px" v-model.number="conditions.capacity" placeholder="不限" :min="0" :max="9999" />
+      </a-form-item>
+      <a-form-item label="教室号">
+        <a-input class="w-100px" v-model="conditions.search['classroom_id']" allow-clear />
       </a-form-item>
     </a-form>
   </a-card>
@@ -59,6 +58,7 @@
       disabledDate(current) {
         return current && current < moment().endOf('day');
       },
+
 
       disabledDateTime() {
       return {

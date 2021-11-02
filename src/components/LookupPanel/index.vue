@@ -3,7 +3,11 @@
     <LookupConditions ref="conditions" @filter="countdown(300, true)" />
     <!--suppress JSUnusedGlobalSymbols -->
     <a-divider />
-    <div slot="content" class="selected-classroom">
+    <div slot="content" class="selected-classroom" v-if="getSelectedTime() !== null">
+      <strong>已选时段：</strong>
+      <div ></div>
+      <a>{{getSelectedTime()[0]}} {{getSelectedTime()[1]}}</a>
+      <a-divider />
       <strong>已选教室：</strong>
       <a-tag
           v-for="room in getSelectedClassroom()"
@@ -14,7 +18,7 @@
       >
         {{room.id}}
       </a-tag>
-      <a-button type="primary" >提交</a-button>
+      <a-button type="primary" @click="pushSlectedClassroom(getSelectedTime())">提交</a-button>
     </div>
     <a-divider />
     <a-table
@@ -24,8 +28,8 @@
       :locale="{emptyText: '没有匹配的记录'}"
       :pagination="{position: 'bottom', showTotal: total => `${total} 条记录`}"
     >
-      <a-table-column title="可用教室列表" data-index="classroom">
-        <template v-slot="classroom">
+      <a-table-column title="可用教室列表" data-index="classroom" >
+        <template v-slot="classroom" >
           <a target="_blank" rel="external nofollow">
 <!--            <strong>{{ // classroom.capacity }}</strong>-->
             <strong>{{ classroom.classroom_id }} | </strong>{{classroom.capacity}}座 | <small>{{classroom.building}}</small>
@@ -93,7 +97,7 @@
 
 <script>
   import LookupConditions from './LookupConditions';
-  import {LookupPanelMixin} from '../../mixins/LookupPanel';
+  import {LookupConditionsMixin, LookupPanelMixin} from '../../mixins/LookupPanel';
   import ATableColumn from "ant-design-vue/es/table/Column";
 
   export default {
@@ -110,12 +114,20 @@
       )
       },
       getSelectedClassroom() {
-        window.console.log(this.$store.state.reservedClassroom);
         return this.$store.state.reservedClassroom;
       },
+
+      // processSelectedTime() {
+      //   // if ('date' in selectedTime) {
+      //   //   return selectedTime['date'];
+      //   // }
+      //   return this.getSelectedTime();
+      // }
+
+
     },
 
-    mixins: [LookupPanelMixin],
+    mixins: [LookupConditionsMixin, LookupPanelMixin],
   };
 </script>
 
