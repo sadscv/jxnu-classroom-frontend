@@ -1,5 +1,6 @@
 import PromiseWorker from 'promise-worker';
 import axios from "axios";
+import moment from "moment";
 
 export const LookupPanelMixin = {
   data() {
@@ -9,6 +10,7 @@ export const LookupPanelMixin = {
       storageBusy: false,
       timer: null,
       returnConditions: {},
+      submitButtonLoading: false,
     };
   },
   mounted() {
@@ -63,14 +65,20 @@ export const LookupPanelMixin = {
       this.storageBusy = true;
       this.$store.dispatch('unselectClassroom', data);
     },
-    pushSlectedClassroom(date, timeslot) {
+    pushSlectedClassroom(class_time, classrooms) {
+      this.submitButtonLoading = true;
+      console.log(class_time['date']);
+      if ('date' in class_time) {
+        class_time['date'] = moment(class_time['date']).toISOString().split('T')[0];
+      }
       let data = {
-        'date':date,
-        'timeslot': timeslot,
+        'class_time':class_time,
+        'classrooms':classrooms,
       };
       return new Promise((resolve, reject) => {
-        axios.post('http://127.0.0.1:5000/API/v1.0/apply_classroom/', data).then((response) => {
+        axios.post('/API/v1.0/apply_classroom/', data).then((response) => {
           console.log(response);
+          this.submitButtonLoading = false;
           resolve();
         }).catch(() => {
           reject();
@@ -110,22 +118,9 @@ export const LookupConditionsMixin = {
 
   },
   methods: {
-    getSelectedTime() {
+    getRawSelectedTime() {
       if (this.returnConditions.class_time) {
-        let class_time = this.returnConditions.class_time;
-        let timeslot = [];
-        let date = null;
-        if (class_time['timeslot']) {
-          class_time['timeslot'].forEach((ts) => {
-            timeslot.push(['12节', '3节', '4节', '5节', '67节', '89节', '10-12节','午间(12:20-13:50)', '晚间(17:20-18:50)'][ts]);
-          })
-        }
-        if (class_time['date']) {
-          date = class_time['date'].toISOString().split('T')[0];
-        }
-        if (timeslot.length !== 0 && date!== null) {
-          return [date , timeslot]
-        }
+        return this.returnConditions.class_time;
       }
       return  null;
     },

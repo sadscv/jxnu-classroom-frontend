@@ -3,10 +3,10 @@
     <LookupConditions ref="conditions" @filter="countdown(300, true)" />
     <!--suppress JSUnusedGlobalSymbols -->
     <a-divider />
-    <div slot="content" class="selected-classroom" v-if="getSelectedTime() !== null">
+    <div slot="content" class="selected-classroom" v-if="getSelectedTimeslot() !== null">
       <strong>已选时段：</strong>
       <div ></div>
-      <a>{{getSelectedTime()[0]}} {{getSelectedTime()[1]}}</a>
+      <a>{{ getSelectedTimeslot()[0] }} {{ getSelectedTimeslot()[1] }}</a>
       <a-divider />
       <strong>已选教室：</strong>
       <a-tag
@@ -18,7 +18,13 @@
       >
         {{room.id}}
       </a-tag>
-      <a-button type="primary" @click="pushSlectedClassroom(getSelectedTime())">提交</a-button>
+      <a-button
+          type="primary"
+          :loading=submitButtonLoading
+          @click="pushSlectedClassroom(getRawSelectedTime(), getSelectedClassroom())"
+      >
+        提交
+      </a-button>
     </div>
     <a-divider />
     <a-table
@@ -99,6 +105,7 @@
   import LookupConditions from './LookupConditions';
   import {LookupConditionsMixin, LookupPanelMixin} from '../../mixins/LookupPanel';
   import ATableColumn from "ant-design-vue/es/table/Column";
+  import moment from "moment";
 
   export default {
     name: 'LookupPanel',
@@ -115,6 +122,26 @@
       },
       getSelectedClassroom() {
         return this.$store.state.reservedClassroom;
+      },
+
+      getSelectedTimeslot() {
+        if (this.getRawSelectedTime()) {
+          let class_time = this.getRawSelectedTime();
+          let timeslots = [];
+          let date = null;
+          if (class_time['timeslot']) {
+            class_time['timeslot'].forEach((ts) => {
+              timeslots.push(['12节', '3节', '4节', '5节', '67节', '89节', '10-12节','午间(12:20-13:50)', '晚间(17:20-18:50)'][ts]);
+            })
+          }
+          if (class_time['date']) {
+            date = moment(class_time['date']).toISOString().split('T')[0];
+          }
+          if (timeslots.length !== 0 && date!== null) {
+            return [date , timeslots]
+          }
+        }
+        return  null;
       },
 
       // processSelectedTime() {
