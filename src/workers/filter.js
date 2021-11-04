@@ -27,7 +27,7 @@ registerPromiseWorker(function (message) {
           let week = (condition.date.getDay()+6)%7;
           let empty_flag = false;
           condition.timeslot.forEach((ts)=> {
-            if (parseInt(ts)<7 && data['usage'][week*7+parseInt(ts)] !== null) {
+            if (parseInt(ts)<8 && data['usage'][(week+1).toString()+(ts).toString()] !== null) {
               empty_flag = true;
             }
           })
@@ -38,12 +38,11 @@ registerPromiseWorker(function (message) {
   let rows = [];
   let conditionsRegExp = {};
   for (let condition in message.conditions.search) {
-    if ( condition in message.conditions.search) {
+    if (condition in message.conditions.search) {
       conditionsRegExp[condition] = concatRegExp(message.conditions.search[condition].split(/\s+/))
     }
   }
 
-  // for (let key in message.allClassroom) {
    Object.keys(message.allClassroom).forEach((key) => {
     let row = message.allClassroom[key]
     if (isNumberGreater(message.allClassroom[key], message.conditions.capacity)) {

@@ -25,7 +25,8 @@ export const ClassroomTableMixin = {
   },
   computed: {
     rows() {
-      return JSON.parse(JSON.stringify(this.$store.getters.ClassroomTableRows));
+      let usedClassrooms = this.$store.getters.ClassroomTableRows;
+      return JSON.parse(JSON.stringify(usedClassrooms));
       // [6, 5, 4, 3, 2, 1, 0].forEach((j) => {
       //     [6, 5, 4, 3, 2, 1, 0].forEach((i) => {
       //       rows[i][j] = null;

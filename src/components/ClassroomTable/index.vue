@@ -28,10 +28,9 @@
 <!--          <th>{{ ['第12节', '第3节', '第4节', '第5节', '第67节', '第89节', '晚上'][index] }}</th>-->
           <th> {{ index }}</th>
           <td> {{ row['capacity']}} </td>
-          <template v-for="(course, index2) in row['usage']">
-            <td :key="index2">
-              <a>{{ row['usage']['index2'] }}</a>
-              <ClassCard :course="course" v-if="course != null && !course.qr" :venue="venueMode"
+          <template v-for="(value, key) in row['usage']">
+            <td :key="key">
+              <ClassCard :course="value" v-if="value != null && !value.qr" :venue="venueMode"
                          @click.native="handleClassCardClick()" />
             </td>
           </template>

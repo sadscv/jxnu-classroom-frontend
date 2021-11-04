@@ -73,8 +73,8 @@
       ['12节', '3节', '4节', '5节', '67节', '89节', '10-12节','午间(12:20-13:50)', '晚间(17:20-18:50)'].forEach((timeslot, index) => {
       let weekData = {
         title: timeslot,
-        value: index,
-        key: index,
+        value: index+1,
+        key: index+1,
         children: [],
       };
       this.treeData.push(weekData);

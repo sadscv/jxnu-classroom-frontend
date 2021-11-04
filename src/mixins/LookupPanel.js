@@ -49,7 +49,7 @@ export const LookupPanelMixin = {
     },
     filter(conditions) {
       return this.promiseWorker.postMessage({
-        allClassroom: this.$store.state.allClassroom,
+        allClassroom: this.$store.state.usedClassrooms,
         reservedClassroom: this.$store.state.reservedClassroom,
         classroomTableRows: this.$store.getters.ClassroomTableRows,
         classList: this.$store.state.classList,
@@ -61,30 +61,39 @@ export const LookupPanelMixin = {
       this.$store.dispatch(select ? 'reserveClassroomThenSelect' : 'reserveClassroom', data);
     },
     unselectClassroom(data) {
-      console.log(data);
       this.storageBusy = true;
       this.$store.dispatch('unselectClassroom', data);
     },
     pushSlectedClassroom(class_time, classrooms) {
       this.submitButtonLoading = true;
-      console.log(class_time['date']);
       if ('date' in class_time) {
         class_time['date'] = moment(class_time['date']).toISOString().split('T')[0];
+        console.log(class_time['date']);
       }
       let data = {
         'class_time':class_time,
         'classrooms':classrooms,
       };
       return new Promise((resolve, reject) => {
-        axios.post('/API/v1.0/apply_classroom/', data).then((response) => {
-          console.log(response);
+        axios.post('/API/v1.0/apply_classroom/', data).then(() => {
+          this.$message.success('申请成功');
           this.submitButtonLoading = false;
+        }).then(() => {
+          this.updateData();
           resolve();
         }).catch(() => {
           reject();
         })
       })
     },
+    updateData() {
+      this.$store.dispatch('updateAllClassroomInfo').then(() => {
+          this.$message.success('课程数据已更新！');
+        }).catch(()=> {
+          this.$message.error('更新课程数据时出错，请刷新页面重试！', 30);
+        }).finally(()=> {
+        });
+    }
 
   },
 };
@@ -120,6 +129,7 @@ export const LookupConditionsMixin = {
   methods: {
     getRawSelectedTime() {
       if (this.returnConditions.class_time) {
+        console.log(this.returnConditions.class_time);
         return this.returnConditions.class_time;
       }
       return  null;

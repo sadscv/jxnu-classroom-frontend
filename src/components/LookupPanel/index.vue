@@ -6,12 +6,12 @@
     <div slot="content" class="selected-classroom" v-if="getSelectedTimeslot() !== null">
       <strong>已选时段：</strong>
       <div ></div>
-      <a>{{ getSelectedTimeslot()[0] }} {{ getSelectedTimeslot()[1] }}</a>
+      <a>{{ getRawSelectedTime() }} {{ getSelectedTimeslot()[1] }}</a>
       <a-divider />
       <strong>已选教室：</strong>
       <a-tag
           v-for="room in getSelectedClassroom()"
-          :key="room"
+          :key="room.id"
           color="red"
           closable
           @close="unselectClassroom(room.id)"
@@ -49,7 +49,7 @@
         <div slot="title" class="about-data-wrapper">
           <a-popover placement="leftBottom">
             <div slot="content" class="about-data">
-              所有数据<strong>【非实时】</strong>，视情况可能存在高达数日的误差，仅供参考。<br />
+              所有数据<strong>【非实时】</strong>，可能与实际情况存在误差，仅供参考。<br />
               更新时间：
               <a-tag>
                 <a-icon type="clock-circle" />
@@ -57,6 +57,7 @@
                 <span>123</span>
 <!--                <span>{{ new Date($store.state.allClassesExtraUpdateTime).toLocaleString() }}</span>-->
               </a-tag>
+            <a-button type="primary" size="small" class="about-data-update-button" @click="updateData()">更新数据</a-button>
             </div>
             <a-button size="small" type="link" icon="info-circle">说明</a-button>
           </a-popover>
@@ -131,7 +132,7 @@
           let date = null;
           if (class_time['timeslot']) {
             class_time['timeslot'].forEach((ts) => {
-              timeslots.push(['12节', '3节', '4节', '5节', '67节', '89节', '10-12节','午间(12:20-13:50)', '晚间(17:20-18:50)'][ts]);
+              timeslots.push(['12节', '3节', '4节', '5节', '67节', '89节', '10-12节','午间(12:20-13:50)', '晚间(17:20-18:50)'][ts-1]);
             })
           }
           if (class_time['date']) {
@@ -247,6 +248,10 @@
 
   .about-data-wrapper {
     text-align: right;
+  }
+
+   .about-data-update-button{
+     margin-left: 5%;
   }
 
 
