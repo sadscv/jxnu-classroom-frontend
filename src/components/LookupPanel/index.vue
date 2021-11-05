@@ -6,7 +6,7 @@
     <div slot="content" class="selected-classroom" v-if="getSelectedTimeslot() !== null">
       <strong>已选时段：</strong>
       <div ></div>
-      <a>{{ getRawSelectedTime() }} {{ getSelectedTimeslot()[1] }}</a>
+      <a>{{ getSelectedTimeslot()[0] }} {{ getSelectedTimeslot()[1] }}</a>
       <a-divider />
       <strong>已选教室：</strong>
       <a-tag

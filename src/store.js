@@ -154,6 +154,14 @@ export default new Vuex.Store({
         });
       });
     },
+    clearReservedClassroom(context) {
+      return new Promise((resolve) => {
+        context.commit('RESERVED_CLASSROOM', {});
+        Storage.set('reservedClassroom', {}).then(() => {
+          resolve();
+        })
+      })
+    },
     reserveClassroom(context, data) {
       // 添加待选教室
       return new Promise((resolve) => {

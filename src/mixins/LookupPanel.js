@@ -65,10 +65,12 @@ export const LookupPanelMixin = {
       this.$store.dispatch('unselectClassroom', data);
     },
     pushSlectedClassroom(class_time, classrooms) {
+      console.log(class_time, classrooms);
       this.submitButtonLoading = true;
       if ('date' in class_time) {
-        class_time['date'] = moment(class_time['date']).toISOString().split('T')[0];
-        console.log(class_time['date']);
+        if (moment(class_time['date'])) {
+          class_time['date'] = moment(class_time['date']).format("yyyy-MM-DD");
+        }
       }
       let data = {
         'class_time':class_time,
@@ -80,6 +82,7 @@ export const LookupPanelMixin = {
           this.submitButtonLoading = false;
         }).then(() => {
           this.updateData();
+          this.$store.dispatch('clearReservedClassroom');
           resolve();
         }).catch(() => {
           reject();
@@ -129,7 +132,6 @@ export const LookupConditionsMixin = {
   methods: {
     getRawSelectedTime() {
       if (this.returnConditions.class_time) {
-        console.log(this.returnConditions.class_time);
         return this.returnConditions.class_time;
       }
       return  null;
