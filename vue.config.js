@@ -1,10 +1,11 @@
 const WorkerPlugin = require('worker-plugin');
 
 module.exports = {
+  runtimeCompiler: true ,
   devServer: {
     proxy: {
       '/API/v1.0': {
-        target: 'http://127.0.0.1:5000',
+        target: 'http://192.168.1.100:5000',
         secure: false,
         changeOrigin: true,
       },

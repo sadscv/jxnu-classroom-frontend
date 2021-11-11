@@ -34,14 +34,6 @@
                          @click.native="handleClassCardClick()" />
             </td>
           </template>
-          <!--<template v-for="(course, index2) in row">-->
-            <!--<td v-if="course == null || course.first" :key="index2" :rowspan="course != null ? course.span : 1">-->
-              <!--&lt;!&ndash;<a>123</a>&ndash;&gt;-->
-              <!--<ClassCard :course="course" v-if="course != null && !course.qr" :venue="venueMode"-->
-                         <!--@click.native="handleClassCardClick(course.courseId)" />-->
-              <!--<QrCard v-if="course != null && course.qr" />-->
-            <!--</td>-->
-          <!--</template>-->
         </tr>
         </tbody>
       </table>

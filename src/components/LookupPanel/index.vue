@@ -21,10 +21,11 @@
       <a-button
           type="primary"
           :loading=submitButtonLoading
-          @click="pushSlectedClassroom(getRawSelectedTime(), getSelectedClassroom())"
+          @click="pushSelectedClassroom(getRawSelectedTime(), getSelectedClassroom())"
       >
         提交
       </a-button>
+      <PopupPanel :selected-date="getSelectedTimeslot()" :applied-classrooms="getSelectedClassroom()"/>
     </div>
     <a-divider />
     <a-table
@@ -107,10 +108,12 @@
   import {LookupConditionsMixin, LookupPanelMixin} from '../../mixins/LookupPanel';
   import ATableColumn from "ant-design-vue/es/table/Column";
   import moment from "moment";
+  import PopupPanel from "@/components/SubmitPanel/PopupPanel";
 
   export default {
     name: 'LookupPanel',
     components: {
+      PopupPanel,
       ATableColumn,
       LookupConditions,
     },

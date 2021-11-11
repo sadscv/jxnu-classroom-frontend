@@ -72,17 +72,12 @@
     margin-bottom: 1px;
     line-height: 1;
     font-size: 5px;
-    color: rgba(0, 0, 0, 1);
+    color: rgba(255, 255, 255, 0.85);
     max-width: 15px;
     text-overflow: clip;
     overflow: hidden;
   }
 
-  .teacher-name-venue {
-    color: rgba(255, 255, 255, 0.85);
-    line-height: 1.25;
-    font-size: 10px;
-  }
 
   .venue {
     color: rgba(255, 255, 255, 0.85);

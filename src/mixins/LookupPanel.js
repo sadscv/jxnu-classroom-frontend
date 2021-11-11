@@ -11,6 +11,8 @@ export const LookupPanelMixin = {
       timer: null,
       returnConditions: {},
       submitButtonLoading: false,
+      submitButtonDisabled: false,
+      visible: false,
     };
   },
   mounted() {
@@ -22,6 +24,9 @@ export const LookupPanelMixin = {
   watch: {
     '$store.state.reservedClassroom'() {
       this.countdown(0); // 避免重复执行筛选
+      if (this.$store.state.reservedClassroom && this.$store.state.reservedClassroom !== {}) {
+        this.submitButtonDisabled = false;
+      }
     },
   },
   beforeDestroy() {
@@ -64,7 +69,47 @@ export const LookupPanelMixin = {
       this.storageBusy = true;
       this.$store.dispatch('unselectClassroom', data);
     },
-    pushSlectedClassroom(class_time, classrooms) {
+    commitSelectedClassroom(class_time, classrooms) {
+      console.log(class_time, classrooms);
+      this.visible= true;
+    },
+    handleCreate() {
+      const form = this.$refs.collectionForm.form;
+      form.validateFields((err, values) => {
+        if (err) {
+          return;
+        }
+        console.log('Received values of form: ', values);
+        form.resetFields();
+        this.visible = false;
+      });
+    },
+    getSelectedTimeslot() {
+      if (this.getRawSelectedTime()) {
+        let class_time = this.getRawSelectedTime();
+        let timeslots = [];
+        let date = null;
+        if (class_time['timeslot']) {
+          class_time['timeslot'].forEach((ts) => {
+            timeslots.push(['12节', '3节', '4节', '5节', '67节', '89节', '10-12节','午间(12:20-13:50)', '晚间(17:20-18:50)'][ts-1]);
+          })
+        }
+        if (class_time['date']) {
+          date = moment(class_time['date']).toISOString().split('T')[0];
+        }
+        if (timeslots.length !== 0 && date!== null) {
+          return [date , timeslots]
+        }
+      }
+      return  null;
+    },
+    getRawSelectedTime() {
+      if (this.returnConditions.class_time) {
+        return this.returnConditions.class_time;
+      }
+      return  null;
+    },
+    pushSelectedClassroom(class_time, classrooms) {
       console.log(class_time, classrooms);
       this.submitButtonLoading = true;
       if ('date' in class_time) {
@@ -76,7 +121,7 @@ export const LookupPanelMixin = {
         'class_time':class_time,
         'classrooms':classrooms,
       };
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         axios.post('/API/v1.0/apply_classroom/', data).then(() => {
           this.$message.success('申请成功');
           this.submitButtonLoading = false;
@@ -85,7 +130,7 @@ export const LookupPanelMixin = {
           this.$store.dispatch('clearReservedClassroom');
           resolve();
         }).catch(() => {
-          reject();
+          this.$message.warning('申请失败 ，请刷新页面重试！');
         })
       })
     },
@@ -100,6 +145,12 @@ export const LookupPanelMixin = {
 
   },
 };
+
+export const LookupResultMixin = {
+  methods: {
+
+  }
+}
 
 export const LookupConditionsMixin = {
   data() {
@@ -130,11 +181,6 @@ export const LookupConditionsMixin = {
 
   },
   methods: {
-    getRawSelectedTime() {
-      if (this.returnConditions.class_time) {
-        return this.returnConditions.class_time;
-      }
-      return  null;
-    },
+
   }
 };

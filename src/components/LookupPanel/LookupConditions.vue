@@ -7,12 +7,15 @@
                        class="w-140px"
                        v-model="conditions.class_time.date"
         />
+        <template slot="renderExtraFooter">
+          当前仅支持一周内教室申请
+        </template>
       </a-form-item>
 <!--      <a-form-item v-if="conditions.date">-->
 <!--        星期{{['日','一', '二', '三', '四', '五', '六'][conditions.class_time.date.day()]}}-->
 <!--      </a-form-item>-->
-      <a-form-item label="上课时间">
-        <a-tree-select v-model="conditions.class_time.timeslot" class="w-140px" :tree-data="treeData" tree-checkable :show-checked-strategy="SHOW_PARENT" placeholder="Please select" ></a-tree-select>
+      <a-form-item label="选择时段">
+        <a-tree-select v-model="conditions.class_time.timeslot" class="w-140px" :tree-data="treeData" tree-checkable :show-checked-strategy="SHOW_PARENT" placeholder="请选择时段" ></a-tree-select>
 <!--        <MultipleCascader  v-model="conditions.search['class_time']" allow-clear />-->
 <!--        <a-input class="w-100px" v-model="conditions.search['class_time']" allow-clear />-->
       </a-form-item>
@@ -56,7 +59,13 @@
         return result;
       },
       disabledDate(current) {
-        return current && current < moment().endOf('day');
+        if (current  && current < moment().add(6, 'days')) {
+          if (current > moment().startOf('day')) {
+            return false
+          }
+        }
+        return true
+        // return current  && current < moment().add(7, 'days') && current < moment().startOf('day');
       },
 
 
