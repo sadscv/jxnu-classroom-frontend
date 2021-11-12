@@ -9,23 +9,18 @@
       <a>{{ getSelectedTimeslot()[0] }} {{ getSelectedTimeslot()[1] }}</a>
       <a-divider />
       <strong>已选教室：</strong>
-      <a-tag
-          v-for="room in getSelectedClassroom()"
-          :key="room.id"
-          color="red"
-          closable
-          @close="unselectClassroom(room.id)"
-      >
-        {{room.id}}
-      </a-tag>
-      <a-button
-          type="primary"
-          :loading=submitButtonLoading
-          @click="pushSelectedClassroom(getRawSelectedTime(), getSelectedClassroom())"
-      >
-        提交
-      </a-button>
-      <PopupPanel :selected-date="getSelectedTimeslot()" :applied-classrooms="getSelectedClassroom()"/>
+      <p>
+        <a-tag
+            v-for="room in getSelectedClassroom()"
+            :key="room.id"
+            color="red"
+            closable
+            @close="unselectClassroom(room.id)"
+        >
+          {{room.id}}
+        </a-tag>
+      </p>
+      <PopupPanel :selected-date="getSelectedTimeslot()" :applied-classrooms="getSelectedClassroom()" @pushSelectedClassroom="pushSelectedClassroom(getSelectedTimeslot(), getSelectedClassroom())"/>
     </div>
     <a-divider />
     <a-table
@@ -147,6 +142,11 @@
         }
         return  null;
       },
+      test() {
+        console.log('fuck');
+        return null;
+      }
+
 
       // processSelectedTime() {
       //   // if ('date' in selectedTime) {

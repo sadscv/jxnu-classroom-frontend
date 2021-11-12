@@ -1,18 +1,21 @@
 <template>
   <div>
-    <a-button type="primary" @click="showModal">
-      New Collection
+    <a-button
+        type="primary"
+        @click="showModal"
+    >
+      确定
     </a-button>
     <a-modal
       :visible="visible"
-      title='Create a new collection'
+      title='提交申请'
       okText='提交申请'
       @cancel="() => { handleCancel() }"
-      @ok="() => { $emit('create') }"
+      @ok="() => { handlePush() }"
     >
       <a-form class="apply-info-wrapper" :form="form" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-item label="申请时间"> <a>{{selectedDate[0]}} {{selectedDate[1]}}</a> </a-form-item>
-        <a-form-item label="申请教室"> <a>{{appliedClassrooms}}</a></a-form-item>
+        <a-form-item label="申请教室"> <a>{{Object.keys(appliedClassrooms)}}</a></a-form-item>
         <a-form-item label="教师教号" >
           <a-input
             v-model.trim="value"
@@ -34,8 +37,11 @@
 <!--          @focus="handleFocus"-->
 <!--          @blue="handleBlur"-->
 <!--          @change="handleChange"-->
-        <a-select-option v-for="college in getCollegesInfo()" :key="college">{{college}}</a-select-option>
+        <a-select-option v-for="college in getCollegesInfo()" :key="college[0]">{{college}}</a-select-option>
         </a-select>
+      </a-form-item>
+      <a-form-item label="联系方式">
+        <a-input auto-focus/>
       </a-form-item>
       <a-form-item label="申请事由">
         <a-textarea id="apply_reason" placeholder="请输入事由" label="validating"></a-textarea>
@@ -116,6 +122,9 @@ export default {
     },
     handleCancel() {
       this.visible = false;
+    },
+    handlePush() {
+      this.$emit('pushSelectedClassroom');
     },
     handleCreate() {
       const form = this.$refs.collectionForm.form;
