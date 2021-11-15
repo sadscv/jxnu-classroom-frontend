@@ -74,7 +74,7 @@ export const ClassCardMixin = {
         '#F57C00',
         '#E64A19',
         ];
-      if (class_id.includes('占位')) {
+      if (class_id.includes('※')) {
         return colors[0]
       }
       else if (class_id.includes('临时')) {

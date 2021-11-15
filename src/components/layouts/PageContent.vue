@@ -54,34 +54,27 @@
       </div>
       <a-back-top class="back-top" />
     </a-spin>
-    <a-modal v-model="exportDialogVisible" :width="400" :footer="null" destroy-on-close>
-      <ExportDialog />
-    </a-modal>
-    <a-modal v-model="backupAndRestoreDialogVisible" :width="480" :footer="null" destroy-on-close>
-      <BackupAndRestoreDialog @ok="backupAndRestoreDialogVisible = false" />
-    </a-modal>
-    <a-modal v-model="colorSeedDialogVisible" :width="520" :footer="null" destroy-on-close>
-      <ColorSeedDialog @ok="colorSeedDialogVisible = false" />
-    </a-modal>
     <a-modal v-model="saveImageDialogVisible" :footer="null" destroy-on-close>
-      <SaveImageDialog :blob="imageBlob" @ok="saveImageDialogVisible = false" />
+      <SaveImageDialog :blob="imageBlob" @ok="saveImageDialogVisible = false" :ticketId="ticketId"/>
     </a-modal>
   </a-layout-content>
 </template>
 
 <script>
   import LookupPanel from '../LookupPanel';
+  import Vue from "vue";
+  import SaveImageDialog from "@/components/modals/SaveImageDialog";
 
   export default {
     name: 'PageContent',
     components: {
       LookupPanel,
+      SaveImageDialog,
       // BackupAndRestoreDialog,
       // ColorSeedDialog,
       // ExportDialog,
       // ReservedClassesList,
       // ScheduleTable,
-      // SaveImageDialog,
     },
     props: {
       showScheduleTable: {
@@ -94,10 +87,10 @@
         quickInputtingWindow: null,
         exportDialogVisible: false,
         backupAndRestoreDialogVisible: false,
-        colorSeedDialogVisible: false,
         saveImageDialogVisible: false,
         imageBlob: null,
         selectedCollege: null,
+        ticketId : null,
       };
     },
     computed: {
@@ -105,6 +98,11 @@
     watch: {
     },
     created() {
+      Vue.prototype.$showSaveImageDialog = (ticketID) => {
+        // this.imageBlob = blob;
+        this.ticketId = ticketID
+        this.saveImageDialogVisible = true;
+      };
     },
     beforeDestroy() {
     },

@@ -109,8 +109,8 @@ export const LookupPanelMixin = {
       }
       return  null;
     },
-    pushSelectedClassroom(class_time, classrooms) {
-      console.log(class_time, classrooms);
+    pushSelectedClassroom(class_time, classrooms, teacher_id, teacher_name, college_name, telephone, apply_reason) {
+      console.log(class_time, classrooms, teacher_name);
       this.submitButtonLoading = true;
       if ('date' in class_time) {
         if (moment(class_time['date'])) {
@@ -120,17 +120,22 @@ export const LookupPanelMixin = {
       let data = {
         'class_time':class_time,
         'classrooms':classrooms,
+        'teacher_id': teacher_id,
+        'teacher_name':teacher_name,
+        'college_name':college_name,
+        'telephone': telephone,
+        'apply_reason': apply_reason,
       };
       return new Promise((resolve) => {
-        axios.post('/API/v1.0/apply_classroom/', data).then(() => {
+        axios.post('/API/v1.0/apply_classroom/', data).then((response) => {
           this.$message.success('申请成功');
-          this.submitButtonLoading = false;
-        }).then(() => {
           this.updateData();
           this.$store.dispatch('clearReservedClassroom');
+          let ticket_id = response.data['ticket_id']
+          this.$refs.popuppanel.savePDF(ticket_id);
           resolve();
         }).catch(() => {
-          this.$message.warning('申请失败 ，请刷新页面重试！');
+          // this.$message.warning('申请失败 ，请刷新页面重试！');
         })
       })
     },

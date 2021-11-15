@@ -38,7 +38,7 @@ export default new Vuex.Store({
           for (let j = 0; j < 7; j++) {
             if (usage[i*7+j]) {
               if (usage[i*7+j].includes('tmp')) {
-                tmp_usage[(i+1).toString()+(j+1).toString()] = '占位'
+                tmp_usage[(i+1).toString()+(j+1).toString()] = '※'
               }
               else {
               tmp_usage[(i+1).toString()+(j+1).toString()] = '课程'
@@ -185,7 +185,7 @@ export default new Vuex.Store({
     },
     clearReservedClassroom(context) {
       return new Promise((resolve) => {
-        context.commit('C场2', {});
+        context.commit('RESERVED_CLASSROOM', {});
         Storage.set('reservedClassroom', {}).then(() => {
           resolve();
         })

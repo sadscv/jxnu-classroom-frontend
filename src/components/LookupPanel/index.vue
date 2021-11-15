@@ -20,7 +20,13 @@
           {{room.id}}
         </a-tag>
       </p>
-      <PopupPanel :selected-date="getSelectedTimeslot()" :applied-classrooms="getSelectedClassroom()" @pushSelectedClassroom="pushSelectedClassroom(getSelectedTimeslot(), getSelectedClassroom())"/>
+      <PopupPanel
+          :selected-date="getSelectedTimeslot()"
+          :applied-classrooms="getSelectedClassroom()"
+          :raw-selected-data="getRawSelectedTime()"
+          @pushSelectedClassroom="pushSelectedClassroom"
+          ref="popuppanel"
+      />
     </div>
     <a-divider />
     <a-table
@@ -142,11 +148,6 @@
         }
         return  null;
       },
-      test() {
-        console.log('fuck');
-        return null;
-      }
-
 
       // processSelectedTime() {
       //   // if ('date' in selectedTime) {

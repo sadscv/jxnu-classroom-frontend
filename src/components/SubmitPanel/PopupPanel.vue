@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="wrapper">
     <a-button
         type="primary"
         @click="showModal"
@@ -18,11 +18,11 @@
         <a-form-item label="申请教室"> <a>{{Object.keys(appliedClassrooms)}}</a></a-form-item>
         <a-form-item label="教师教号" >
           <a-input
-            v-model.trim="value"
+            v-model.trim="teacher_id"
             ref="input"
             size="large"
             auto-focus
-            @change="getTeacherInfo(value)"
+            @change="getTeacherInfo(teacher_id)"
           />
         </a-form-item>
         <a-form-item label="教师姓名">
@@ -32,58 +32,27 @@
         <a-select
             show-search
             placeholder="select a college"
+            v-model="college_name"
         >
 <!--          :filter-option="filterOption"-->
 <!--          @focus="handleFocus"-->
 <!--          @blue="handleBlur"-->
 <!--          @change="handleChange"-->
-        <a-select-option v-for="college in getCollegesInfo()" :key="college[0]">{{college}}</a-select-option>
+          <a-select-option v-for="college in getCollegesInfo()" :key="college[0]">{{college[0]}}</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="联系方式">
-        <a-input auto-focus/>
+        <a-input v-model="telephone"/>
       </a-form-item>
       <a-form-item label="申请事由">
-        <a-textarea id="apply_reason" placeholder="请输入事由" label="validating"></a-textarea>
+        <a-textarea id="apply_reason" placeholder="请输入事由" label="validating" v-model="apply_reason"></a-textarea>
       </a-form-item>
     </a-form>
-<!--      <a-form layout='vertical' :form="form">-->
-<!--        <a-form-item label='Title'>-->
-<!--          <a-input-->
-<!--            v-decorator="[-->
-<!--              'title',-->
-<!--              {-->
-<!--                rules: [{ required: true, message: 'Please input the title of collection!' }],-->
-<!--              }-->
-<!--            ]"-->
-<!--          />-->
-<!--        </a-form-item>-->
-<!--        <a-form-item label='Description'>-->
-<!--          <a-input-->
-<!--            type='textarea'-->
-<!--            v-decorator="['description']"-->
-<!--          />-->
-<!--        </a-form-item>-->
-<!--        <a-form-item class='collection-create-form_last-form-item'>-->
-<!--          <a-radio-group-->
-<!--            v-decorator="[-->
-<!--              'modifier',-->
-<!--              {-->
-<!--                initialValue: 'private',-->
-<!--              }-->
-<!--            ]"-->
-<!--          >-->
-<!--              <a-radio value='public'>Public</a-radio>-->
-<!--              <a-radio value='private'>Private</a-radio>-->
-<!--            </a-radio-group>-->
-<!--        </a-form-item>-->
-<!--      </a-form>-->
     </a-modal>
   </div>
 </template>
 
 <script>
-
 
 export default {
   data() {
@@ -92,6 +61,10 @@ export default {
       form: this.$form.createForm(this, {name:'infoForm'}),
       currentTeacher: {},
       colleges : {},
+      teacher_id: null,
+      college_name: null,
+      telephone : null,
+      apply_reason : null,
       labelCol: {
           xs: {span:24},
           sm: {span:4},
@@ -105,6 +78,9 @@ export default {
   props: {
     selectedDate: {
       type:Array,
+    },
+    rawSelectedData: {
+      type:Object,
     },
     appliedClassrooms: {
       type:Object,
@@ -124,7 +100,21 @@ export default {
       this.visible = false;
     },
     handlePush() {
-      this.$emit('pushSelectedClassroom');
+      return new Promise((resolve) => {
+        this.$emit('pushSelectedClassroom',
+            this.rawSelectedData,
+            this.appliedClassrooms,
+            this.currentTeacher.教号,
+            this.currentTeacher.姓名,
+            this.college_name,
+            this.telephone,
+            this.apply_reason
+        )
+        setTimeout(() => {
+          this.visible = false;
+        }, 0);
+        resolve();
+        })
     },
     handleCreate() {
       const form = this.$refs.collectionForm.form;
@@ -144,14 +134,29 @@ export default {
         this.currentTeacher = all_teachers[teacher_id];
       }else {
         this.currentTeacher = {
+          '教号': null,
           '姓名': null,
           '单位号': null,
+          '单位名称': null,
         }
       }
     },
     getCollegesInfo() {
       return this.$store.state.allColleges;
-    }
+    },
+    savePDF(ticket_id) {
+      this.capturing = true;
+      console.log(ticket_id);
+      const hide = this.$message.loading('正在生成...');
+      this.$nextTick(() => {
+          this.$showSaveImageDialog(ticket_id)
+        }).catch(() => {
+          this.$message.error('截图失败！');
+        }).finally(() => {
+          this.capturing = false;
+          hide();
+        });
+    },
   },
 };
 </script>

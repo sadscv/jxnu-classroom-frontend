@@ -23,6 +23,11 @@ Viewer.setDefaults({
   maxZoomRatio: 1.5,
 });
 Vue.config.productionTip = false
+
+// if (!Vue.prototype.$showSaveImageDialog) {
+//   Vue.prototype.$showSaveImageDialog = () => void 0;
+// }
+
 VueClipboard.config.autoSetContainer = true;
 Vue.component(Button.name, Button)
 
