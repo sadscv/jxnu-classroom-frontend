@@ -19,6 +19,9 @@ registerPromiseWorker(function (message) {
         return capacity <= conditionNumber;
       }
     }
+    if (parseInt(message.allClassroom[`${data['classroom_id']}`]['capacity']) <= 0) {
+      return true;
+    }
     return ;
   };
 

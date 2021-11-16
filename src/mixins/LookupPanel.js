@@ -135,7 +135,7 @@ export const LookupPanelMixin = {
           this.$refs.popuppanel.savePDF(ticket_id);
           resolve();
         }).catch(() => {
-          // this.$message.warning('申请失败 ，请刷新页面重试！');
+          this.$message.warning('申请失败 ，请刷新页面重试！');
         })
       })
     },

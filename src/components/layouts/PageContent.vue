@@ -98,9 +98,9 @@
     watch: {
     },
     created() {
-      Vue.prototype.$showSaveImageDialog = (ticketID) => {
+      Vue.prototype.$showSaveImageDialog = (ticketId) => {
         // this.imageBlob = blob;
-        this.ticketId = ticketID
+        this.ticketId = ticketId
         this.saveImageDialogVisible = true;
       };
     },

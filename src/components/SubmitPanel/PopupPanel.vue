@@ -144,12 +144,11 @@ export default {
     getCollegesInfo() {
       return this.$store.state.allColleges;
     },
-    savePDF(ticket_id) {
+    savePDF(ticketId) {
       this.capturing = true;
-      console.log(ticket_id);
       const hide = this.$message.loading('正在生成...');
       this.$nextTick(() => {
-          this.$showSaveImageDialog(ticket_id)
+          this.$showSaveImageDialog(ticketId)
         }).catch(() => {
           this.$message.error('截图失败！');
         }).finally(() => {
