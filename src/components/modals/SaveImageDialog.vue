@@ -17,6 +17,7 @@
 <script>
   import saveAs from 'file-saver';
   import pdf from 'vue-pdf';
+  import apiConfig from "@/apiConfig";
 
   export default {
     name: 'SaveImageDialog',
@@ -39,7 +40,6 @@
       };
     },
     computed: {
-
       viewerOption() {
         return {
           inline: false,
@@ -60,7 +60,7 @@
       },
     },
     mounted() {
-      this.defaultFileName = `申请单-`;
+      this.defaultFileName = `教室申请单`;
       this.fileName = this.defaultFileName;
     },
     beforeDestroy() {
@@ -73,9 +73,9 @@
       },
       setPdfUrl() {
         if (this.ticketId) {
-          return "http://127.0.0.1:5000/API/v1.0/ticket/"+ this.ticketId.toString() +".pdf";
+          return apiConfig.getTicketApi(this.ticketId);
         }
-        return "http://127.0.0.1:5000/API/v1.0/ticket/"+ '10342' +".pdf";
+        return apiConfig.getTicketApi('10000');
       },
     },
   };

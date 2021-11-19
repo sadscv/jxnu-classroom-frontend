@@ -29,7 +29,7 @@
           <th> {{ index }}</th>
           <td> {{ row['capacity']}} </td>
           <template v-for="(value, key) in row['usage']">
-            <td :key="key">
+            <td :key="key" v-if="!key.includes('8')">
               <ClassCard :course="value" v-if="value != null && !value.qr" :venue="venueMode"
                          @click.native="handleClassCardClick()" />
             </td>

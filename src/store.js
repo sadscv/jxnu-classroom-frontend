@@ -24,6 +24,7 @@ export default new Vuex.Store({
     allInfosExtraUpdateTime: null,
     reservedClassroom: {}, // 持久化
     currentTeacher : {},
+    lastUpdateTime: null,
   },
   getters: {
     ClassroomTableRows(state) {
@@ -36,26 +37,40 @@ export default new Vuex.Store({
         let usage = rows[row]['usage'];
         for (let i = 0; i < 7; i++) {
           for (let j = 0; j < 7; j++) {
+            // console.log(usage[i*7+j]);
             if (usage[i*7+j]) {
               if (usage[i*7+j].includes('tmp')) {
-                tmp_usage[(i+1).toString()+(j+1).toString()] = '※'
+                tmp_usage[(i+1).toString()+(j+1).toString()] = {
+                  'courseName': ' ',
+                }
               }
               else {
-              tmp_usage[(i+1).toString()+(j+1).toString()] = '课程'
+              tmp_usage[(i+1).toString()+(j+1).toString()] = {
+                  'courseName': '课程',
+                }
               }
             }else {
-              tmp_usage[(i+1).toString()+(j+1).toString()] = usage[i*7+j]
+              tmp_usage[(i+1).toString()+(j+1).toString()] = {
+                'courseName': usage[i*7+j],
+              }
             }
           }
         }
         rows[row]['usage'] = tmp_usage;
       }
-      for (let classroom_id in state.appliedClassrooms) {
-        for (let date in state.appliedClassrooms[classroom_id]) {
+      for (let classroomId in state.appliedClassrooms) {
+        for (let date in state.appliedClassrooms[classroomId]) {
           let week = moment(date).isoWeekday()
-          for (let ts_key in state.appliedClassrooms[classroom_id][date]){
-            // console.log(week.toString()+state.appliedClassrooms[classroom_id][date][ts_key]);
-            rows[classroom_id]['usage'][week.toString()+state.appliedClassrooms[classroom_id][date][ts_key]] = '临时';
+          let applyInfo = state.appliedClassrooms[classroomId][date]
+          for (let tsKey in applyInfo){
+            let occupiedDate = [moment(date).format('YYYY-MM-DD')]
+            if (rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]] && 'occupiedDate' in rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]]) {
+              occupiedDate += rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]]['occupiedDate']
+            }
+            rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]] = {
+              'courseName': '临时',
+              'occupiedDate': occupiedDate,
+            };
           }
         }
       }
@@ -106,6 +121,9 @@ export default new Vuex.Store({
     },
     CURRENT_TEACHER(state, value) {
       state.currentTeacher = value;
+    },
+    LAST_UPDATE_TIME(state, value) {
+      state.lastUpdateTime = value;
     }
   },
   actions: {
@@ -154,6 +172,7 @@ export default new Vuex.Store({
             context.commit('ALL_COLLEGES', response.data['all_colleges']);
             tasks.push(Storage.set('allColleges', response.data['all_colleges']));
           }
+          context.commit('LAST_UPDATE_TIME', moment.now())
           Promise.all(tasks).then(()=> {
             resolve('1');
           });

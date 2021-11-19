@@ -5,12 +5,12 @@ module.exports = {
   devServer: {
     proxy: {
       '/API/v1.0': {
-        target: 'http://192.168.1.100:5000',
+        target: 'http://219.229.250.28:5000',
         secure: false,
         changeOrigin: true,
       },
-      '/api': {
-        target: 'https://xk2.zkllab.com',
+      'http://192.168.1.100:8080': {
+        target: 'http://219.229.250.28:8080',
         changeOrigin: true,
       },
     },

@@ -2,7 +2,7 @@
   <div :class="_class" :style="style"
   >
     <!--       @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"-->
-      <div class="course-name"><strong>{{course}}</strong></div>
+      <div class="course-name"><strong>{{course.courseName}}</strong></div>
   </div>
 
       <!--<div v-if="Object.keys(course.conflicted).length === 0">-->
@@ -15,11 +15,9 @@
     name: 'ClassCard',
     props: {
       course: {
-        type: String,
+        type: Object,
       },
-      courses: {
-        type: Array,
-      },
+
       venue: {
         type: Boolean,
       },
@@ -76,17 +74,5 @@
     max-width: 15px;
     text-overflow: clip;
     overflow: hidden;
-  }
-
-
-  .venue {
-    color: rgba(255, 255, 255, 0.85);
-    line-height: 1.25;
-    font-size: 12px;
-  }
-
-  .venue-at {
-    color: white;
-    font-weight: bold;
   }
 </style>

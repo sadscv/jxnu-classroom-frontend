@@ -1,4 +1,5 @@
 import registerPromiseWorker from 'promise-worker/register';
+import moment from "moment";
 
 function concatRegExp(parts) {
   parts.forEach((part, index) => {
@@ -19,7 +20,7 @@ registerPromiseWorker(function (message) {
         return capacity <= conditionNumber;
       }
     }
-    if (parseInt(message.allClassroom[`${data['classroom_id']}`]['capacity']) <= 0) {
+    if (parseInt(message.allClassroom[`${data['classroom_id']}`]['capacity']) <= 1) {
       return true;
     }
     return ;
@@ -27,14 +28,21 @@ registerPromiseWorker(function (message) {
 
   const isOccupied = (data, condition) => {
       if (condition.date !== null && condition.timeslot !== null) {
-          let week = (condition.date.getDay()+6)%7;
-          let empty_flag = false;
-          condition.timeslot.forEach((ts)=> {
-            if (parseInt(ts)<8 && data['usage'][(week+1).toString()+(ts).toString()] !== null) {
-              empty_flag = true;
+        let week = (condition.date.getDay()+6)%7;
+        let empty_flag = false;
+        condition.timeslot.forEach((ts)=> {
+          let currentUsage = data['usage'][(week+1).toString()+(ts).toString()]
+          if (currentUsage && currentUsage['courseName'] !== null) {
+            if (currentUsage['occupiedDate']) {
+                if (currentUsage['occupiedDate'].includes(moment(condition.date).format('YYYY-MM-DD'))) {
+                  empty_flag = true;
+                }
+            }else {
+                empty_flag = true;
             }
-          })
-          return empty_flag;
+          }
+        })
+        return empty_flag;
       }
   }
 
@@ -48,6 +56,9 @@ registerPromiseWorker(function (message) {
 
    Object.keys(message.allClassroom).forEach((key) => {
     let row = message.allClassroom[key]
+    if (!message.conditions.class_time.timeslot) {
+        return;
+    }
     if (isNumberGreater(message.allClassroom[key], message.conditions.capacity)) {
       return;
     }

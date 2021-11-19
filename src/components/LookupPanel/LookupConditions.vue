@@ -4,13 +4,16 @@
       <a-form-item label="选择日期">
         <a-date-picker format="YYYY-MM-DD"
                        :disabled-date="disabledDate"
-                       class="w-140px"
+                       class="w-120px"
                        v-model="conditions.class_time.date"
-        />
-        <template slot="renderExtraFooter">
-          当前仅支持一周内教室申请
+        >
+        <template slot="renderExtraFooter" >
+          <div class="align-center">
+            当前可申请7日内教室
+          </div>
         </template>
-      </a-form-item>
+        </a-date-picker>
+    </a-form-item>
 <!--      <a-form-item v-if="conditions.date">-->
 <!--        星期{{['日','一', '二', '三', '四', '五', '六'][conditions.class_time.date.day()]}}-->
 <!--      </a-form-item>-->
@@ -60,9 +63,14 @@
       },
       disabledDate(current) {
         if (current  && current < moment().add(6, 'days')) {
+          // if (current === moment(2021-11-26, 'YYYY-MM-DD')) {
+          //   console.log(current === moment(2021-11-26, 'YYYY-MM-DD'))
+          //   return true
+          // }
           if (current > moment().startOf('day')) {
             return false
           }
+
         }
         return true
         // return current  && current < moment().add(7, 'days') && current < moment().startOf('day');
@@ -118,5 +126,8 @@
   }
   .w-60px {
     width: 60px;
+  }
+  .align-center {
+    margin-left: 20%;
   }
 </style>

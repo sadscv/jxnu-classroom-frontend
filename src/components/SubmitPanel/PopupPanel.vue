@@ -1,11 +1,17 @@
 <template>
   <div ref="wrapper">
-    <a-button
+    <a-dropdown-button
         type="primary"
         @click="showModal"
     >
       确定
-    </a-button>
+      <a-menu slot="overlay" >
+              <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
+              <a-menu-item  @click="handlePushAdmin">
+                <template> 直接提交 </template>
+              </a-menu-item>
+            </a-menu>
+    </a-dropdown-button>
     <a-modal
       :visible="visible"
       title='提交申请'
@@ -64,6 +70,7 @@ export default {
       teacher_id: null,
       college_name: null,
       telephone : null,
+      ticketId: 0,
       apply_reason : null,
       labelCol: {
           xs: {span:24},
@@ -84,6 +91,13 @@ export default {
     },
     appliedClassrooms: {
       type:Object,
+    },
+  },
+  watch: {
+    ticketId: {
+      handler() {
+        this.savePDF(this.ticketId);
+      }
     }
   },
   computed: {
@@ -108,13 +122,32 @@ export default {
             this.currentTeacher.姓名,
             this.college_name,
             this.telephone,
-            this.apply_reason
+            this.apply_reason,
         )
         setTimeout(() => {
           this.visible = false;
         }, 0);
         resolve();
         })
+    },
+    handlePushAdmin() {
+      return new Promise((resolve) => {
+        this.$emit('pushSelectedClassroom',
+            this.rawSelectedData,
+            this.appliedClassrooms,
+            '000000',
+            '待定',
+            '教务处',
+            '88120271',
+            '管理员操作',
+            true,
+        )
+        setTimeout(() => {
+          this.visible = false;
+        }, 0);
+        resolve();
+        })
+
     },
     handleCreate() {
       const form = this.$refs.collectionForm.form;
@@ -145,12 +178,13 @@ export default {
       return this.$store.state.allColleges;
     },
     savePDF(ticketId) {
+      console.log('fuck', ticketId);
       this.capturing = true;
       const hide = this.$message.loading('正在生成...');
       this.$nextTick(() => {
-          this.$showSaveImageDialog(ticketId)
+          this.$showSaveImageDialog(ticketId);
         }).catch(() => {
-          this.$message.error('截图失败！');
+          this.$message.error('生成失败！');
         }).finally(() => {
           this.capturing = false;
           hide();

@@ -36,7 +36,7 @@
       :locale="{emptyText: '没有匹配的记录'}"
       :pagination="{position: 'bottom', showTotal: total => `${total} 条记录`}"
     >
-      <a-table-column title="可用教室列表" data-index="classroom" >
+      <a-table-column title="可用教室列表" data-index="classroom">
         <template v-slot="classroom" >
           <a target="_blank" rel="external nofollow">
 <!--            <strong>{{ // classroom.capacity }}</strong>-->
@@ -56,8 +56,7 @@
               <a-tag>
                 <a-icon type="clock-circle" />
                 <a-divider type="vertical" />
-                <span>123</span>
-<!--                <span>{{ new Date($store.state.allClassesExtraUpdateTime).toLocaleString() }}</span>-->
+                <span>{{getUpdateTime()}}</span>
               </a-tag>
             <a-button type="primary" size="small" class="about-data-update-button" @click="updateData()">更新数据</a-button>
             </div>
@@ -74,12 +73,12 @@
           >
             <a-icon type="plus-circle" />
             选择
-            <a-menu slot="overlay">
-              <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
-              <a-menu-item @click="selectClassroom(action.row, true)">
-                <template>选择并提交</template>
-              </a-menu-item>
-            </a-menu>
+<!--            <a-menu slot="overlay">-->
+<!--              &lt;!&ndash;suppress JSUnresolvedVariable, ES6ModulesDependencies &ndash;&gt;-->
+<!--              <a-menu-item @click="selectClassroom(action.row, true)">-->
+<!--                <template>选择并提交</template>-->
+<!--              </a-menu-item>-->
+<!--            </a-menu>-->
           </a-dropdown-button>
           <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
           <a-dropdown-button
@@ -90,16 +89,19 @@
           >
             <a-icon type="minus-circle" />
             已选
-            <a-menu slot="overlay" >
-              <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
-              <a-menu-item v-if="action.isSelected" @click="unselectClassroom(action.row['classroom_id'])">
-                <template> 取消选择 </template>
-              </a-menu-item>
-            </a-menu>
+<!--            <a-menu slot="overlay" >-->
+<!--              &lt;!&ndash;suppress JSUnresolvedVariable, ES6ModulesDependencies &ndash;&gt;-->
+<!--              <a-menu-item v-if="action.isSelected" @click="unselectClassroom(action.row['classroom_id'])">-->
+<!--                <template> 取消选择 </template>-->
+<!--              </a-menu-item>-->
+<!--            </a-menu>-->
         </a-dropdown-button>
         </template>
       </a-table-column>
     </a-table>
+    <a-modal v-model="saveImageDialogVisible" :footer="null" destroy-on-close>
+      <SaveImageDialog @ok="saveImageDialogVisible = false" :ticketId="ticketId"/>
+    </a-modal>
 
     </div>
 </template>
@@ -110,13 +112,22 @@
   import ATableColumn from "ant-design-vue/es/table/Column";
   import moment from "moment";
   import PopupPanel from "@/components/SubmitPanel/PopupPanel";
+  import SaveImageDialog from "@/components/modals/SaveImageDialog";
+  import Vue from "vue";
 
   export default {
     name: 'LookupPanel',
     components: {
+      SaveImageDialog,
       PopupPanel,
       ATableColumn,
       LookupConditions,
+    },
+    data() {
+      return {
+        saveImageDialogVisible: false,
+        ticketId : null,
+      }
     },
     methods: {
       handleClassCardClick(class_id) {
@@ -148,15 +159,15 @@
         }
         return  null;
       },
-
-      // processSelectedTime() {
-      //   // if ('date' in selectedTime) {
-      //   //   return selectedTime['date'];
-      //   // }
-      //   return this.getSelectedTime();
-      // }
-
-
+      getUpdateTime() {
+        return moment(this.$store.state.lastUpdateTime).format('YYYY-MM-DD hh-mm-ss');
+      }
+    },
+    created() {
+      Vue.prototype.$showSaveImageDialog = (ticketId) => {
+        this.ticketId = ticketId
+        this.saveImageDialogVisible = true;
+      };
     },
 
     mixins: [LookupConditionsMixin, LookupPanelMixin],

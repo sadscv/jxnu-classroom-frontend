@@ -49,7 +49,7 @@ export const ClassCardMixin = {
     style() {
       return {
         color: 'rgba(255, 255, 255, 0.95)',
-        background: this.classBackgroundColor(this.course),
+        background: this.classBackgroundColor(this.course.courseName),
       };
     },
     _class() {
@@ -60,9 +60,9 @@ export const ClassCardMixin = {
     },
   },
   methods: {
-    classBackgroundColor(class_id) {
+    classBackgroundColor(className) {
       let colors = [
-        '#696969',
+        '#CCCCCC',
         '#689F38',
         '#FFA000',
         '#5D4037',
@@ -74,18 +74,16 @@ export const ClassCardMixin = {
         '#F57C00',
         '#E64A19',
         ];
-      if (class_id.includes('※')) {
+      if (className && className.includes(' ')) {
         return colors[0]
       }
-      else if (class_id.includes('临时')) {
+      else if (className && className.includes('临时')) {
         return colors[1]
       }
-      // else if (class_id.startsWith('20')) {
-      //   return colors[2]
-      // }
-      else {
+      else if (className && className.includes('课程')) {
         return colors[2]
       }
+
     },
   }
 };

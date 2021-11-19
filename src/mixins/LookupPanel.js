@@ -109,8 +109,8 @@ export const LookupPanelMixin = {
       }
       return  null;
     },
-    pushSelectedClassroom(class_time, classrooms, teacher_id, teacher_name, college_name, telephone, apply_reason) {
-      console.log(class_time, classrooms, teacher_name);
+    pushSelectedClassroom(class_time, classrooms, teacher_id, teacher_name, college_name, telephone, apply_reason, directSubmit=false) {
+      console.log(class_time, classrooms, teacher_name, );
       this.submitButtonLoading = true;
       if ('date' in class_time) {
         if (moment(class_time['date'])) {
@@ -131,8 +131,9 @@ export const LookupPanelMixin = {
           this.$message.success('申请成功');
           this.updateData();
           this.$store.dispatch('clearReservedClassroom');
-          let ticket_id = response.data['ticket_id']
-          this.$refs.popuppanel.savePDF(ticket_id);
+          if(!directSubmit) {
+            this.$refs.popuppanel.ticketId = response.data['ticket_id'];
+          }
           resolve();
         }).catch(() => {
           this.$message.warning('申请失败 ，请刷新页面重试！');

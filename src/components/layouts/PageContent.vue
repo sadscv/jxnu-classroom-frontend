@@ -54,27 +54,17 @@
       </div>
       <a-back-top class="back-top" />
     </a-spin>
-    <a-modal v-model="saveImageDialogVisible" :footer="null" destroy-on-close>
-      <SaveImageDialog :blob="imageBlob" @ok="saveImageDialogVisible = false" :ticketId="ticketId"/>
-    </a-modal>
+
   </a-layout-content>
 </template>
 
 <script>
   import LookupPanel from '../LookupPanel';
-  import Vue from "vue";
-  import SaveImageDialog from "@/components/modals/SaveImageDialog";
 
   export default {
     name: 'PageContent',
     components: {
       LookupPanel,
-      SaveImageDialog,
-      // BackupAndRestoreDialog,
-      // ColorSeedDialog,
-      // ExportDialog,
-      // ReservedClassesList,
-      // ScheduleTable,
     },
     props: {
       showScheduleTable: {
@@ -87,23 +77,15 @@
         quickInputtingWindow: null,
         exportDialogVisible: false,
         backupAndRestoreDialogVisible: false,
-        saveImageDialogVisible: false,
         imageBlob: null,
         selectedCollege: null,
-        ticketId : null,
       };
     },
     computed: {
     },
     watch: {
     },
-    created() {
-      Vue.prototype.$showSaveImageDialog = (ticketId) => {
-        // this.imageBlob = blob;
-        this.ticketId = ticketId
-        this.saveImageDialogVisible = true;
-      };
-    },
+
     beforeDestroy() {
     },
   };
@@ -113,7 +95,7 @@
   .page-content {
     min-height: calc(100vh - 64px);
     transition: all 0.2s ease;
-    margin: 64px 0 0 1200px;
+    margin: 64px 0 0 70%;
     padding: 8px;
   }
 
@@ -145,23 +127,6 @@
 
   .beian {
     margin: 0 10px;
-  }
-
-  .mps-beian:before {
-    background: url("../../assets/mps.png") no-repeat center center;
-    vertical-align: text-bottom;
-    background-size: contain;
-    transition: opacity 0.2s;
-    display: inline-block;
-    margin-right: 5px;
-    content: " ";
-    opacity: 0.8;
-    height: 16px;
-    width: 16px;
-  }
-
-  .mps-beian:hover:before {
-    opacity: 0.7;
   }
 
   .alternate-to-desktop {
