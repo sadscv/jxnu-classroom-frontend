@@ -10,10 +10,8 @@
 
         <a-dropdown slot="tabBarExtraContent"  :getTooltipCotainer="trigger => trigger.parentNode">
           <a-button class="ant-dropdown-link" @click="e => e.preventDefault()">
-              <a v-if="selectedCollege">
-              </a>
-              <a v-else-if="selectedCollege">
-                def{{ selectedCollege }}
+              <a v-if="allBuildings.length < 1 || currentBuilding !== selectedBuilding">
+                {{currentBuilding}}
               </a>
               <a v-else>
                 选择楼栋
@@ -78,7 +76,9 @@
         exportDialogVisible: false,
         backupAndRestoreDialogVisible: false,
         imageBlob: null,
-        selectedCollege: null,
+        allBuildings: ['惟义楼','test'],
+        currentBuilding: null,
+        selectedBuilding: null,
       };
     },
     computed: {

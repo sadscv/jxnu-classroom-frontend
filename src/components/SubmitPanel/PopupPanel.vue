@@ -44,7 +44,7 @@
 <!--          @focus="handleFocus"-->
 <!--          @blue="handleBlur"-->
 <!--          @change="handleChange"-->
-          <a-select-option v-for="college in getCollegesInfo()" :key="college[0]">{{college[0]}}</a-select-option>
+          <a-select-option v-for="college in getCollegesInfo()" :key="college.单位名称">{{college.单位名称}}</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="联系方式">
@@ -162,7 +162,6 @@ export default {
     },
     getTeacherInfo(teacher_id) {
       let all_teachers = this.$store.state.allTeachers;
-      console.log(teacher_id, all_teachers);
       if (teacher_id in all_teachers) {
         this.currentTeacher = all_teachers[teacher_id];
       }else {
@@ -175,10 +174,16 @@ export default {
       }
     },
     getCollegesInfo() {
-      return this.$store.state.allColleges;
+      let result = {}
+      let allColleges = this.$store.state.allColleges
+      for (let key in allColleges) {
+        if (allColleges[key].单位性质号 === '1') {
+          result[key] = allColleges[key];
+        }
+      }
+      return result;
     },
     savePDF(ticketId) {
-      console.log('fuck', ticketId);
       this.capturing = true;
       const hide = this.$message.loading('正在生成...');
       this.$nextTick(() => {

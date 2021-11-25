@@ -40,7 +40,7 @@
         <template v-slot="classroom" >
           <a target="_blank" rel="external nofollow">
 <!--            <strong>{{ // classroom.capacity }}</strong>-->
-            <strong>{{ classroom.classroom_id }} | </strong>{{classroom.capacity}}座 | <small>{{classroom.building}}</small>
+            <strong>{{ classroom.classroom_id }} | </strong>{{classroom.capacity}}座 | <small>{{classroom.type}} | {{classroom.building}}</small>
           </a>
           <br />
         </template>

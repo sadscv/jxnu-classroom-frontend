@@ -128,15 +128,21 @@ export const LookupPanelMixin = {
       };
       return new Promise((resolve) => {
         axios.post('/API/v1.0/apply_classroom/', data).then((response) => {
-          this.$message.success('申请成功');
-          this.updateData();
-          this.$store.dispatch('clearReservedClassroom');
-          if(!directSubmit) {
-            this.$refs.popuppanel.ticketId = response.data['ticket_id'];
+          console.log(response.data.code);
+          if (response.data.code && response.data.code.toString().startsWith('400')) {
+            this.$message.warning(response.data.message+',请刷新页面重试');
+            resolve();
+          }else {
+            this.$message.success('申请成功');
+            this.updateData();
+            this.$store.dispatch('clearReservedClassroom');
+            if(!directSubmit) {
+              this.$refs.popuppanel.ticketId = response.data['ticket_id'];
+            }
+            resolve();
           }
-          resolve();
         }).catch(() => {
-          this.$message.warning('申请失败 ，请刷新页面重试！');
+          this.$message.error('申请失败 ，请刷新页面重试！');
         })
       })
     },

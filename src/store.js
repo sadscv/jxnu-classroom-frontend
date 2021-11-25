@@ -12,6 +12,7 @@ export default new Vuex.Store({
   state: {
     loaded: true,
     trimester: null, // 持久化
+    disabledDate: null,
     backend: null, // 持久化
     showIntroductionNotification: true,
     allClassrooms : {},
@@ -89,6 +90,9 @@ export default new Vuex.Store({
     TRIMESTER(state, value) {
       state.trimester = value;
     },
+    DISABLED_DATE(state, value) {
+      state.disabledDate = value;
+    },
     BACKEND(state, value) {
       state.backend = value;
     },
@@ -159,6 +163,10 @@ export default new Vuex.Store({
           if (response.data['trimester'] !== context.state.trimester) {
             context.commit('TRIMESTER', response.data['trimester']);
             tasks.push(Storage.set('trimester', response.data['trimester']));
+          }
+          if (response.data['disabled_date'] !== context.state.disabledDate) {
+            context.commit('DISABLED_DATE', response.data['disabled_date']);
+            tasks.push(Storage.set('disabledDate', response.data['disabled_date']));
           }
           if (response.data['backend'] !== context.state.backend) {
             context.commit('BACKEND', response.data['backend']);

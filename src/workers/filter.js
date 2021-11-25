@@ -79,6 +79,7 @@ registerPromiseWorker(function (message) {
       classroom_id: newRow['classroom_id'],
       capacity: newRow['capacity'],
       building: newRow['building'],
+      type: newRow['type'],
     };
     newRow['action'] = {
       row: row,

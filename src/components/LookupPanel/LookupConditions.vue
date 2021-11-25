@@ -9,7 +9,8 @@
         >
         <template slot="renderExtraFooter" >
           <div class="align-center">
-            当前可申请7日内教室
+            <span v-if="this.datePickerMessage">{{this.datePickerMessage}}</span>
+            <span v-else>当前可申请7日内教室</span>
           </div>
         </template>
         </a-date-picker>
@@ -49,6 +50,7 @@
         treeData : [],
         value: [],
         SHOW_PARENT,
+        datePickerMessage: null,
       };
     },
 
@@ -61,16 +63,21 @@
         }
         return result;
       },
-      disabledDate(current) {
-        if (current  && current < moment().add(6, 'days')) {
-          // if (current === moment(2021-11-26, 'YYYY-MM-DD')) {
-          //   console.log(current === moment(2021-11-26, 'YYYY-MM-DD'))
-          //   return true
-          // }
+      disabledDate: function (current) {
+
+        if (current && current < moment().add(60, 'days')) {
+          if (this.$store.state.disabledDate) {
+            let dd = this.$store.state.disabledDate;
+            for (let index in dd) {
+              if (current.isSame(moment(dd[index].date, 'YYYY-MM-DD'), "day")) {
+                this.datePickerMessage = dd[index].message;
+                return true
+              }
+            }
+          }
           if (current > moment().startOf('day')) {
             return false
           }
-
         }
         return true
         // return current  && current < moment().add(7, 'days') && current < moment().startOf('day');
@@ -128,6 +135,6 @@
     width: 60px;
   }
   .align-center {
-    margin-left: 20%;
+    text-align: center;
   }
 </style>
