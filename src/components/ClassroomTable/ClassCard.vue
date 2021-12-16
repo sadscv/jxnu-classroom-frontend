@@ -69,7 +69,7 @@
   .course-name {
     margin-bottom: 1px;
     line-height: 1;
-    font-size: 5px;
+    font-size: 10px;
     color: rgba(255, 255, 255, 0.85);
     max-width: 15px;
     text-overflow: clip;
