@@ -68,10 +68,21 @@ export default new Vuex.Store({
             if (rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]] && 'occupiedDate' in rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]]) {
               occupiedDate += rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]]['occupiedDate']
             }
-            rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]] = {
-              'courseName': '临时',
-              'occupiedDate': occupiedDate,
-            };
+            if (rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]]) {
+              rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]] = {
+                'courseName': '临时',
+                'occupiedDate': occupiedDate,
+                'isCourse': 1,
+              };
+
+            }else {
+              rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]] = {
+                'courseName': '临时',
+                'occupiedDate': occupiedDate,
+              };
+
+            }
+
           }
         }
       }
