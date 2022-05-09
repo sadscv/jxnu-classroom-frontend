@@ -28,27 +28,28 @@ registerPromiseWorker(function (message) {
 
   const isOccupied = (data, condition) => {
 
-      if (moment(condition.date).isAfter('2021-12-28')) {
-        console.log(condition.date, 'fuck');
-        if (condition.date !== null && condition.timeslot !== null) {
-          let week = (condition.date.getDay()+6)%7;
-          let empty_flag = false;
-          condition.timeslot.forEach((ts)=> {
-            let currentUsage = data['usage'][(week+1).toString()+(ts).toString()]
-            if (currentUsage && currentUsage['courseName'] === '临时') {
-              if (currentUsage['occupiedDate']) {
-                if (currentUsage['occupiedDate'].includes(moment(condition.date).format('YYYY-MM-DD'))) {
-                  empty_flag = true;
-                }
-              }
-              // else {
-              //     empty_flag = false;
-              // }
-            }
-          })
-          return empty_flag;
-        }
-      }else {
+      // if (moment(condition.date).isAfter('2021-12-28')) {
+      //   console.log(condition.date, 'fuck');
+      //   if (condition.date !== null && condition.timeslot !== null) {
+      //     let week = (condition.date.getDay()+6)%7;
+      //     let empty_flag = false;
+      //     condition.timeslot.forEach((ts)=> {
+      //       let currentUsage = data['usage'][(week+1).toString()+(ts).toString()]
+      //       if (currentUsage && currentUsage['courseName'] === '临时') {
+      //         if (currentUsage['occupiedDate']) {
+      //           if (currentUsage['occupiedDate'].includes(moment(condition.date).format('YYYY-MM-DD'))) {
+      //             empty_flag = true;
+      //           }
+      //         }
+      //         // else {
+      //         //     empty_flag = false;
+      //         // }
+      //       }
+      //     })
+      //     return empty_flag;
+      //   }
+      // }
+
         if (condition.date !== null && condition.timeslot !== null) {
           let week = (condition.date.getDay()+6)%7;
           let empty_flag = false;
@@ -69,7 +70,6 @@ registerPromiseWorker(function (message) {
           })
           return empty_flag;
         }
-      }
   }
 
   let rows = [];

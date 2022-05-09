@@ -10,6 +10,7 @@ export const LookupPanelMixin = {
       storageBusy: false,
       timer: null,
       returnConditions: {},
+      clientIp: '0.0.0.0',
       submitButtonLoading: false,
       submitButtonDisabled: false,
       visible: false,
@@ -109,8 +110,13 @@ export const LookupPanelMixin = {
       }
       return  null;
     },
-    pushSelectedClassroom(class_time, classrooms, teacher_id, teacher_name, college_name, telephone, apply_reason, directSubmit=false) {
+    pushSelectedClassroom(apply_building, class_time, classrooms, teacher_id, teacher_name, college_name, telephone, apply_reason, directSubmit=false) {
       console.log(class_time, classrooms, teacher_name, );
+      fetch('https://api.ipify.org?format=json')
+          .then(response => response.json())
+          .then(response => {
+            this.clientIp = response.ip;
+          });
       this.submitButtonLoading = true;
       if ('date' in class_time) {
         if (moment(class_time['date'])) {
@@ -125,6 +131,8 @@ export const LookupPanelMixin = {
         'college_name':college_name,
         'telephone': telephone,
         'apply_reason': apply_reason,
+        'apply_building': apply_building,
+        'client_ip': this.clientIp,
       };
       return new Promise((resolve) => {
         axios.post('/API/v1.0/apply_classroom/', data).then((response) => {
@@ -147,7 +155,13 @@ export const LookupPanelMixin = {
       })
     },
     updateData() {
-      this.$store.dispatch('updateAllClassroomInfo').then(() => {
+      let currentBuilding = this.$store.state.currentBuilding
+      if (currentBuilding === null) {
+        currentBuilding = '惟义楼'
+      }
+      this.$store.dispatch('updateAllClassroomInfo', currentBuilding).then(() => {
+      this.$store.dispatch('refreshUpdateTime', moment.now())
+      console.log(moment.now())
           this.$message.success('课程数据已更新！');
         }).catch(()=> {
           this.$message.error('更新课程数据时出错，请刷新页面重试！', 30);

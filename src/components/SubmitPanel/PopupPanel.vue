@@ -7,10 +7,10 @@
       确定
       <a-menu slot="overlay" >
               <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
-              <a-menu-item  @click="handlePushAdmin">
-                <template> 直接提交 </template>
-              </a-menu-item>
-            </a-menu>
+        <a-menu-item  @click="handlePushAdmin" :disabled="$store.state.isAdmin === false">
+          <template v-if="$store.state.isAdmin"> 直接提交  </template>
+        </a-menu-item>
+      </a-menu>
     </a-dropdown-button>
     <a-modal
       :visible="visible"
@@ -44,7 +44,7 @@
 <!--          @focus="handleFocus"-->
 <!--          @blue="handleBlur"-->
 <!--          @change="handleChange"-->
-          <a-select-option v-for="college in getCollegesInfo()" :key="college.单位名称">{{college.单位名称}}</a-select-option>
+          <a-select-option v-for="college in getCollegesInfo().sort()" :key="college">{{college}}</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="联系方式">
@@ -64,6 +64,7 @@ export default {
   data() {
     return {
       visible: false,
+      isAdmin: this.$store.state.isAdmin,
       form: this.$form.createForm(this, {name:'infoForm'}),
       currentTeacher: {},
       colleges : {},
@@ -108,7 +109,13 @@ export default {
   },
   methods: {
     showModal() {
-      this.visible = true;
+      if (Object.keys(this.appliedClassrooms).length === 0) {
+        this.$message.error('请选择至少1间教室');
+      }else if (Object.keys(this.appliedClassrooms).length > 10) {
+        this.$message.error('一次性申请10间以上教室的大型活动,请提前联系教务处教学管理科：88120271');
+      }else {
+        this.visible = true;
+      }
     },
     handleCancel() {
       this.visible = false;
@@ -116,6 +123,7 @@ export default {
     handlePush() {
       return new Promise((resolve) => {
         this.$emit('pushSelectedClassroom',
+            this.$store.state.currentBuilding,
             this.rawSelectedData,
             this.appliedClassrooms,
             this.currentTeacher.教号,
@@ -133,6 +141,7 @@ export default {
     handlePushAdmin() {
       return new Promise((resolve) => {
         this.$emit('pushSelectedClassroom',
+            this.$store.state.currentBuilding,
             this.rawSelectedData,
             this.appliedClassrooms,
             '000000',
@@ -174,14 +183,18 @@ export default {
       }
     },
     getCollegesInfo() {
-      let result = {}
+      let result = []
       let allColleges = this.$store.state.allColleges
-      for (let key in allColleges) {
-        if (allColleges[key].单位性质号 === '1') {
-          result[key] = allColleges[key];
+      // result = Object.keys(allColleges)
+      // for (let prop in ['1','2','3','4']) {
+        for (let key in allColleges) {
+          if (allColleges[key].单位性质号 in ['1','2','3','4', '5', '6']) {
+            result.push(key);
+          }
         }
-      }
-      return result;
+      // }
+
+      return result.sort();
     },
     savePDF(ticketId) {
       this.capturing = true;

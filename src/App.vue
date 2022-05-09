@@ -40,6 +40,7 @@ export default {
       top: '11px',
       maxCount: 1,
     });
+    // window.console.log(this.$route.query.id)
     this.updateData();
     addEventListener('storage', this.handleStorage);
     addEventListener('keydown', this.handleKeydown);
@@ -94,4 +95,4 @@ export default {
     font-size: 12px;
     color: rgba(0, 0, 0, .45);
   }
-</style>
+  </style>

@@ -4,8 +4,18 @@
     <a-config-provider :get-popup-container="() => $refs.setting" :auto-insert-space-in-button="false">
       <table class="schedule-table">
         <thead>
+<!--        <tr>-->
+<!--          <th class="header-capacity">星期</th>-->
+<!--          <th class="header-week" v-for="week in ['11', '12','13','14','15','16','17','21','22','23','24','25','26','27','31','32','33','34','35','36','37', '41','42','43','44','45','46','47','51','52','53','54','55','56','57','61','62','63','64','65','66','67','71','72','73','74','75','76','77']" :key="week">{{ week }}</th>-->
+<!--        </tr>-->
         <tr>
-          <td class="header-setting">
+          <td class="header-setting" >
+          </td>
+          <th class="header-capacity">星期</th>
+          <th class="header-week" colspan="7" v-for="week in ['一', '二','三','四','五','六','日']" :key="week">星期{{ week }}</th>
+        </tr>
+        <tr>
+          <td class="header-setting" rowspan="2">
             <div ref="setting" :class="{ setting: true, 'setting-show': venueMode }">
               <a-dropdown v-if="!venueMode">
                 <a-button shape="circle" size="small" icon="setting" />
@@ -19,8 +29,8 @@
               <img src="../../assets/logo.png" alt="Logo" />
             </div>
           </td>
-          <th class="header-capacity">定员</th>
-          <th class="header-week" v-for="week in ['11', '12','13','14','15','16','17','21','22','23','24','25','26','27','31','32','33','34','35','36','37', '41','42','43','44','45','46','47','51','52','53','54','55','56','57','61','62','63','64','65','66','67','71','72','73','74','75','76','77']" :key="week">{{ week }}</th>
+          <th class="header-capacity" >定员</th>
+          <th class="header-week" v-for="week in ['12', '3','4','5','67','89','晚','12', '3','4','5','67','89','晚','12', '3','4','5','67','89','晚','12', '3','4','5','67','89','晚','12', '3','4','5','67','89','晚','12', '3','4','5','67','89','晚','12', '3','4','5','67','89','晚']" :key="week">{{ week }}</th>
         </tr>
         </thead>
         <tbody>
@@ -76,7 +86,6 @@
     top: 0;
     z-index: 10;
     background: white;
-    /*color: white;*/
     opacity: 1;
   }
 
@@ -131,6 +140,22 @@
 
   .header-week {
     width: 40%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-width: 1px 0 1px 0 ;
+    /*padding: 4px 3px 3px;*/
+    /*transition: all 0.2s;*/
+    /*border-radius: 2px;*/
+    /*position: absolute;*/
+    /*user-select: none;*/
+    line-height: 1.35;
+    /*text-align: left;*/
+    overflow: hidden;
+    /*cursor: pointer;*/
+    /*bottom: 1px;*/
+    /*right: 1px;*/
+    /*left: 1px;*/
+    /*top: 1px;*/
+
   }
 
   /*noinspection CssUnusedSymbol*/

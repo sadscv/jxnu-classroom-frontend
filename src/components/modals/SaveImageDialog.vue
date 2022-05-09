@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>打印申请单</h3>
+    <h3>请下载后打印申请单</h3>
     <div v-viewer="viewerOption">
 <!--      <img :src="blobUrl" alt="课程表图片" />-->
     </div>

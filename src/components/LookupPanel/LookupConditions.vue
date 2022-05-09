@@ -64,8 +64,11 @@
         return result;
       },
       disabledDate: function (current) {
-
-        if (current && current < moment().add(60, 'days')) {
+        let open_period = 6
+        if (this.$store.state.isAdmin) {
+          open_period = 60
+        }
+        if (current && current < moment().add(open_period, 'days')) {
           if (this.$store.state.disabledDate) {
             let dd = this.$store.state.disabledDate;
             for (let index in dd) {
@@ -82,7 +85,11 @@
         return true
         // return current  && current < moment().add(7, 'days') && current < moment().startOf('day');
       },
-
+      resetInputs: function () {
+        this.conditions.class_time.date = null;
+        this.conditions.class_time.timeslot = null;
+        return true;
+      },
 
       disabledDateTime() {
       return {
@@ -94,7 +101,8 @@
     },
 
     created() {
-      ['12节', '3节', '4节', '5节', '67节', '89节', '10-12节','午间(12:20-13:50)', '晚间(17:20-18:50)'].forEach((timeslot, index) => {
+      ['12节', '3节', '4节', '5节', '67节', '89节', '10-12节'].forEach((timeslot, index) => {
+        // ['12节', '3节', '4节', '5节', '67节', '89节', '10-12节','午间(12:20-13:50)', '晚间(17:20-18:50)'].forEach((timeslot, index) => {
       let weekData = {
         title: timeslot,
         value: index+1,

@@ -31,6 +31,7 @@ Vue.config.productionTip = false
 VueClipboard.config.autoSetContainer = true;
 Vue.component(Button.name, Button)
 
+
 new Vue({
   store,
   render: h => h(App),

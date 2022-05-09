@@ -11,6 +11,7 @@ import moment from "moment";
 export default new Vuex.Store({
   state: {
     loaded: true,
+    isAdmin: false,
     trimester: null, // 持久化
     disabledDate: null,
     backend: null, // 持久化
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     allInfosExtra: null,
     allInfosExtraUpdateTime: null,
     reservedClassroom: {}, // 持久化
+    currentBuilding: '惟义楼',
     currentTeacher : {},
     lastUpdateTime: null,
   },
@@ -65,24 +67,28 @@ export default new Vuex.Store({
           let applyInfo = state.appliedClassrooms[classroomId][date]
           for (let tsKey in applyInfo){
             let occupiedDate = [moment(date).format('YYYY-MM-DD')]
-            if (rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]] && 'occupiedDate' in rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]]) {
-              occupiedDate += rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]]['occupiedDate']
+            if (classroomId in rows) {
+              if (
+                  'usage' in rows[classroomId] &&
+                  rows[classroomId]['usage'][week.toString() + applyInfo[tsKey]] &&
+                  'occupiedDate' in rows[classroomId]['usage'][week.toString() + applyInfo[tsKey]]
+              ) {
+                occupiedDate += rows[classroomId]['usage'][week.toString() + applyInfo[tsKey]]['occupiedDate']
+              }
+              if (rows[classroomId]['usage'][week.toString() + applyInfo[tsKey]]) {
+                rows[classroomId]['usage'][week.toString() + applyInfo[tsKey]] = {
+                  'courseName': '临时',
+                  'occupiedDate': occupiedDate,
+                  'isCourse': 1,
+                };
+              } else {
+                rows[classroomId]['usage'][week.toString() + applyInfo[tsKey]] = {
+                  'courseName': '临时',
+                  'occupiedDate': occupiedDate,
+                };
+
+              }
             }
-            if (rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]]) {
-              rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]] = {
-                'courseName': '临时',
-                'occupiedDate': occupiedDate,
-                'isCourse': 1,
-              };
-
-            }else {
-              rows[classroomId]['usage'][week.toString()+applyInfo[tsKey]] = {
-                'courseName': '临时',
-                'occupiedDate': occupiedDate,
-              };
-
-            }
-
           }
         }
       }
@@ -97,6 +103,9 @@ export default new Vuex.Store({
   mutations: {
     LOADED(state, value) {
       state.loaded = value;
+    },
+    ISADMIN(state, value) {
+      state.isAdmin = value;
     },
     TRIMESTER(state, value) {
       state.trimester = value;
@@ -142,9 +151,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    updateAllClassroomInfo(context) {
+    updateAllClassroomInfo(context, currentBuilding) {
       return new Promise((resolve, reject) => {
-        axios.get(apiConfig.getClassroomApi).then((response) => {
+        axios.get(apiConfig.getClassroomApi(currentBuilding)).then((response) => {
             let used_classrooms = response.data['used_classrooms'];
             let applied_classrooms =  {}
             if ('applied_classrooms' in response.data) {
@@ -158,11 +167,15 @@ export default new Vuex.Store({
             let tasks = []
             tasks.push(Storage.set('usedClassrooms', used_classrooms));
             tasks.push(Storage.set('appliedClassrooms', applied_classrooms));
+            tasks.push(Storage.set('currentBuilding', currentBuilding));
             Promise.all(tasks).then(() => resolve());
         }).catch(() => {
             reject();
         })
       })
+    },
+    refreshUpdateTime(context, time) {
+      context.commit('LAST_UPDATE_TIME', time)
     },
     updateFromNullStorage() {
         return new Promise((resolve => {resolve();}))
@@ -190,6 +203,10 @@ export default new Vuex.Store({
           if (response.data['all_colleges'] !== context.state.allTeachers) {
             context.commit('ALL_COLLEGES', response.data['all_colleges']);
             tasks.push(Storage.set('allColleges', response.data['all_colleges']));
+          }
+          if (response.data['is_admin'] !== context.state.isAdmin) {
+            context.commit('ISADMIN', response.data['is_admin']);
+            tasks.push(Storage.set('isAdmin', response.data['is_admin']));
           }
           context.commit('LAST_UPDATE_TIME', moment.now())
           Promise.all(tasks).then(()=> {

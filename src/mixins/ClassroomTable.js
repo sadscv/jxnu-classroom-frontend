@@ -83,6 +83,9 @@ export const ClassCardMixin = {
       else if (className && className.includes('课程')) {
         return colors[2]
       }
+      else if (className && className.includes('冲突')) {
+        return colors[7]
+      }
 
     },
   }

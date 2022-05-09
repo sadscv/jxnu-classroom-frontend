@@ -12,6 +12,12 @@
             <a-icon type="info-circle" />
             关于
           </template>
+          <a-menu-item>
+<!--            <a target="_blank" rel="external nofollow">-->
+<!--              <a-icon type="message" />-->
+              意见反馈请致电:88120271
+<!--            </a>-->
+          </a-menu-item>
        </a-sub-menu>
       </a-menu>
     </a-config-provider>

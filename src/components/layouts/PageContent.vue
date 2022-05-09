@@ -5,22 +5,25 @@
         <a-tab-pane v-if="showScheduleTable" tab="课表" key="schedule_table">
         </a-tab-pane>
         <a-tab-pane tab="检索" key="lookup">
-          <LookupPanel />
+          <LookupPanel ref="lookuppanel"/>
         </a-tab-pane>
 
         <a-dropdown slot="tabBarExtraContent"  :getTooltipCotainer="trigger => trigger.parentNode">
           <a-button class="ant-dropdown-link" @click="e => e.preventDefault()">
-              <a v-if="allBuildings.length < 1 || currentBuilding !== selectedBuilding">
-                {{currentBuilding}}
+              <a v-if="this.$store.state.currentBuilding">
+                {{this.$store.state.currentBuilding}}
               </a>
               <a v-else>
                 选择楼栋
               </a>
             <a-icon type="down" />
           </a-button>
-            <a-menu slot="overlay">
+          <a-menu slot="overlay">
+            <a-menu-item style="z-index: 1" v-for="(building, index2) in allBuildings " :key="index2" @click="handleBuildingListClick(building)" >
+              {{ building}}
+            </a-menu-item>
+          </a-menu>
 
-            </a-menu>
         </a-dropdown>
 
 
@@ -42,7 +45,7 @@
       </a-tabs>
       <div class="content-footer">
         <div>
-          Copyright &copy; {{ new Date().getFullYear() }} <a href="https://github.com/sadscv" target="_blank">sadscv
+          Copyright &copy; {{ new Date().getFullYear() }} <a href="https://github.com/sadscv/jxnu-classroom-frontend" target="_blank">sadscv
         </a>.
           All Rights Reserved.
         </div>
@@ -76,8 +79,7 @@
         exportDialogVisible: false,
         backupAndRestoreDialogVisible: false,
         imageBlob: null,
-        allBuildings: ['惟义楼','test'],
-        currentBuilding: null,
+        allBuildings: ['惟义楼','新实验楼', '田家炳楼', '第二教学大楼'],
         selectedBuilding: null,
       };
     },
@@ -85,7 +87,57 @@
     },
     watch: {
     },
+    methods: {
+      handleBuildingListClick(building) {
+        this.selectedBuilding = building;
+        this.$store.state.currentBuilding = building;
+        this.updateData(building)
+      },
+      updateData(building) {
+        setTimeout(() => {
+        this.$message.loading('正在检查基础数据更新...', 0);
+      }, 0)
+        // const hide = this.$message.loading('正在检查数据更新...', 0);
+        this.$store.dispatch('updateFromNullStorage').then(() => {
+        this.$store.dispatch('checkUpdateAllInfos').then((data) => {
+          if (data != null) {
+            this.$store.dispatch('updateAllClassroomInfo', building).then(() => {
+              this.$message.success('基础数据已更新！');
+            }).catch(()=> {
+              this.$message.error('更新课程数据时出错，请刷新页面重试！', 30);
+            }).finally(()=> {
+              this.$store.commit('LOADED', true);
+            });
+          } else {
+            this.$store.commit('LOADED', true);
+          }
+        }).catch(()=>{
+          this.$message.error('更新课程数据时出错，请刷新页面重试！', 30);
+          this.$store.commit('LOADED', true);
+        }).finally(()=>{
+          this.$destroyAll();
+          this.$refs.lookuppanel.$refs.conditions.resetInputs()
+          // hide();
 
+        });
+
+      })
+
+        // this.$destroyAll();
+        // this.$store.dispatch('updateAllClassroomInfo', this.$store.state.currentBuilding).then(() => {
+        //
+        //   const hide = this.$message.loading('正在更新基础数据...', 0);
+        //   this.$store.commit('LOADED', true);
+        //   hide();
+        //   this.$message.success('课程数据已更新！');
+        // }).catch(()=> {
+        //   this.$message.error('更新课程数据时出错，请刷新页面重试！', 30);
+        // }).finally(()=> {
+        // });
+    }
+
+
+    },
     beforeDestroy() {
     },
   };

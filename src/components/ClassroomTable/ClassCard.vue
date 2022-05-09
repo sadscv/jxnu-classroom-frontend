@@ -45,7 +45,7 @@
     position: absolute;
     user-select: none;
     line-height: 1.35;
-    text-align: left;
+    text-align: center;
     overflow: hidden;
     cursor: pointer;
     bottom: 1px;
@@ -74,5 +74,6 @@
     max-width: 15px;
     text-overflow: clip;
     overflow: hidden;
+    text-align: center;
   }
 </style>
