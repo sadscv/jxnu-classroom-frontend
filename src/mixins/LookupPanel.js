@@ -138,7 +138,7 @@ export const LookupPanelMixin = {
         axios.post('/API/v1.0/apply_classroom/', data).then((response) => {
           console.log(response.data.code);
           if (response.data.code && response.data.code.toString().startsWith('400')) {
-            this.$message.warning(response.data.message+',请刷新页面重试');
+            this.$message.warning(response.data.message);
             resolve();
           }else {
             this.$message.success('申请成功');

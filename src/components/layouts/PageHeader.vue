@@ -4,7 +4,7 @@
       <a-menu class="header-menu" theme="light" mode="horizontal" :selectable="false">
         <a-menu-item class="header-title-wrapper">
           <div class="header-title-container">
-            <div class="header-title">教室安排 <small>OL/Beta</small></div>
+            <div class="header-title">教室申请 <small>OL</small></div>
           </div>
         </a-menu-item>
         <a-sub-menu class="actions-menu-item actions-menu-item-right">
@@ -13,11 +13,18 @@
             关于
           </template>
           <a-menu-item>
+              录播教室申请：现代教育技术中心(88122982)
+          </a-menu-item>
+          <a-menu-item>
+              微格教室申请：教师教育示范中心(88122925)
+          </a-menu-item>
+          <a-menu-item>
 <!--            <a target="_blank" rel="external nofollow">-->
 <!--              <a-icon type="message" />-->
-              意见反馈请致电:88120271
+              意见反馈请致电教务处教学管理科(88120271)
 <!--            </a>-->
           </a-menu-item>
+
        </a-sub-menu>
       </a-menu>
     </a-config-provider>
@@ -63,15 +70,15 @@
   }
 
   .header-title-wrapper:before {
-    background: url("../../assets/logo.png") no-repeat center center;
+    background: url("../../assets/logo.jpg") no-repeat center center;
     background-size: contain;
     vertical-align: middle;
     display: inline-block;
     margin-right: 12px;
     user-select: none;
-    height: 32px;
+    height: 50px;
     content: " ";
-    width: 32px;
+    width: 50px;
   }
 
   .header-title-container {

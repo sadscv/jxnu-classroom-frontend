@@ -49,16 +49,25 @@
 <!--      </a-table-column>-->
       <a-table-column data-index="action" width="160px">
         <div slot="title" class="about-data-wrapper">
-          <a-popover placement="leftBottom">
+          <a-popover placement="left">
             <div slot="content" class="about-data">
-              所有数据<strong>【非实时】</strong>，可能与实际情况存在误差，仅供参考。<br />
-              更新时间：
-              <a-tag>
-                <a-icon type="clock-circle" />
-                <a-divider type="vertical" />
-                <span>{{getUpdateTime()}}</span>
-              </a-tag>
-            <a-button type="primary" size="small" class="about-data-update-button" @click="updateData()">更新数据</a-button>
+              <ul>
+                <li> 选择所需的日期和时段后，将显示该时段全部可申请教室。</li>
+                <li>
+                  所有数据<strong>【非实时】</strong>，可能与实际情况存在误差，仅供参考。<br />
+                  更新时间：
+                  <a-tag>
+                    <a-icon type="clock-circle" />
+                    <a-divider type="vertical" />
+                    <span>{{getUpdateTime()}}</span>
+                  </a-tag>
+                  <a-button type="primary" size="small" class="about-data-update-button" @click="updateData()">更新数据</a-button>
+
+                </li>
+
+
+              </ul>
+
             </div>
             <a-button size="small" type="link" icon="info-circle">说明</a-button>
           </a-popover>
@@ -160,7 +169,7 @@
         return  null;
       },
       getUpdateTime() {
-        return moment(this.$store.state.lastUpdateTime).format('YYYY-MM-DD hh-mm-ss');
+        return moment(this.$store.state.lastUpdateTime).format('YYYY-MM-DD HH-mm-ss');
       }
     },
     created() {
