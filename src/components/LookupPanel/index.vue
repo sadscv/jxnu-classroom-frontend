@@ -27,11 +27,7 @@
           @pushSelectedClassroom="pushSelectedClassroom"
           ref="popuppanel"
       />
-    </div>
-    <a-divider />
-    <a-table
-      ref="table"
-      class="table"
+    </div> <a-divider /> <a-table ref="table" class="table"
       :data-source="rows"
       :locale="{emptyText: '没有匹配的记录'}"
       :pagination="{position: 'bottom', showTotal: total => `${total} 条记录`}"
@@ -40,7 +36,7 @@
         <template v-slot="classroom" >
           <a target="_blank" rel="external nofollow">
 <!--            <strong>{{ // classroom.capacity }}</strong>-->
-            <strong>{{ classroom.classroom_id }} | </strong>{{classroom.capacity}}座 | <small>{{classroom.type}} | {{classroom.building}}</small>
+            <strong>{{ classroom.classroom_id }} | </strong>{{classroom.capacity}}座 | <small v-if="classroom.type!=='语音室'">{{classroom.type}}</small><small v-else><strong style="color:red">{{classroom.type}}</strong></small> | {{classroom.building}}
           </a>
           <br />
         </template>
@@ -74,37 +70,30 @@
         </div>
         <template v-slot="action">
           <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
-          <a-dropdown-button
-            v-if="!action.isSelected"
-            type="primary"
-            :disabled="storageBusy"
-            @click="selectClassroom(action.row, false)"
-          >
-            <a-icon type="plus-circle" />
-            选择
-<!--            <a-menu slot="overlay">-->
-<!--              &lt;!&ndash;suppress JSUnresolvedVariable, ES6ModulesDependencies &ndash;&gt;-->
-<!--              <a-menu-item @click="selectClassroom(action.row, true)">-->
-<!--                <template>选择并提交</template>-->
-<!--              </a-menu-item>-->
-<!--            </a-menu>-->
-          </a-dropdown-button>
+          <a-tooltip>
+            <template #title v-if="action.row.type === '语音室'">
+              <span >语音室无监控覆盖，座位排布与机房相仿，不适宜大部分教学、考试、活动，请您谨慎选择</span>
+            </template>
+            <a-dropdown-button
+              v-if="!action.isSelected"
+              type="primary"
+              :disabled="storageBusy"
+              @click="selectClassroom(action.row, false)"
+            >
+              <a-icon type="plus-circle" />
+              选择
+            </a-dropdown-button>
           <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
-          <a-dropdown-button
-            v-else
-            type="dashed"
-            :disabled="storageBusy"
-            @click="unselectClassroom(action.row['classroom_id'])"
-          >
-            <a-icon type="minus-circle" />
-            已选
-<!--            <a-menu slot="overlay" >-->
-<!--              &lt;!&ndash;suppress JSUnresolvedVariable, ES6ModulesDependencies &ndash;&gt;-->
-<!--              <a-menu-item v-if="action.isSelected" @click="unselectClassroom(action.row['classroom_id'])">-->
-<!--                <template> 取消选择 </template>-->
-<!--              </a-menu-item>-->
-<!--            </a-menu>-->
-        </a-dropdown-button>
+            <a-dropdown-button
+              v-else
+              type="dashed"
+              :disabled="storageBusy"
+              @click="unselectClassroom(action.row['classroom_id'])"
+            >
+              <a-icon type="minus-circle" />
+              已选
+          </a-dropdown-button>
+          </a-tooltip>
         </template>
       </a-table-column>
     </a-table>

@@ -188,7 +188,7 @@ export default {
       // result = Object.keys(allColleges)
       // for (let prop in ['1','2','3','4']) {
         for (let key in allColleges) {
-          if (allColleges[key].单位性质号 in ['1','2','3','4', '5', '6']) {
+          if (allColleges[key].单位性质号 in ['1','2','3','4','5','6','7']) {
             result.push(key);
           }
         }
