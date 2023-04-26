@@ -72,7 +72,7 @@
           <!--suppress JSUnresolvedVariable, ES6ModulesDependencies -->
           <a-tooltip>
             <template #title v-if="action.row.type === '语音室'">
-              <span >语音室无监控覆盖，座位排布与机房相仿，不适宜大部分教学、考试、活动，请您谨慎选择</span>
+              <span >语音室无监控覆盖，座位排布与机房相仿，部分教学、考试、活动不适宜在此开展，请您谨慎选择</span>
             </template>
             <a-dropdown-button
               v-if="!action.isSelected"

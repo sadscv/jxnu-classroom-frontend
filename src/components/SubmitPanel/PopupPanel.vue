@@ -29,6 +29,7 @@
             size="large"
             auto-focus
             @change="getTeacherInfo(teacher_id)"
+            v-decorator="['teacher_id', { rules: [{ required: true, message: '请输入教号' }] }]"
           />
         </a-form-item>
         <a-form-item label="教师姓名">
@@ -48,10 +49,22 @@
         </a-select>
       </a-form-item>
       <a-form-item label="联系方式">
-        <a-input v-model="telephone"/>
+        <a-input
+            v-model="telephone"
+            v-decorator="['telephone', { rules: [{ required: true, message: '请输入联系方式' }] }]"
+        />
       </a-form-item>
-      <a-form-item label="申请事由">
-        <a-textarea id="apply_reason" placeholder="请输入事由" label="validating" v-model="apply_reason"></a-textarea>
+      <a-form-item
+          label="申请事由"
+          :rules="[{ required: true, message: 'Please input your username!' }]"
+      >
+        <a-textarea
+            id="apply_reason"
+            placeholder="请输入事由"
+            label="validating"
+            v-model="apply_reason"
+            v-decorator="['reason', { rules: [{ required: true, message: '请输入申请事由' }] }]"
+        />
       </a-form-item>
     </a-form>
     </a-modal>
@@ -122,7 +135,9 @@ export default {
     },
     handlePush() {
       return new Promise((resolve) => {
-        this.$emit('pushSelectedClassroom',
+        this.form.validateFields((err) => {
+          if (!err) {
+            this.$emit('pushSelectedClassroom',
             this.$store.state.currentBuilding,
             this.rawSelectedData,
             this.appliedClassrooms,
@@ -131,12 +146,14 @@ export default {
             this.college_name,
             this.telephone,
             this.apply_reason,
-        )
-        setTimeout(() => {
-          this.visible = false;
-        }, 0);
-        resolve();
+         )
+         setTimeout(() => {
+           this.visible = false;
+         }, 0);
+         resolve();
+        }
         })
+      })
     },
     handlePushAdmin() {
       return new Promise((resolve) => {

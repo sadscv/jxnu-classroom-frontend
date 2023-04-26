@@ -23,7 +23,9 @@
       <a-select-option v-for="college in colleges" :key="college">{{college}}</a-select-option>
       </a-select>
     </a-form-item>
-    <a-form-item label="申请事由">
+    <a-form-item
+        label="申请事由"
+    >
       <a-textarea id="apply_reason" placeholder="请输入事由" label="validating"></a-textarea>
     </a-form-item>
     <a-form-item>
