@@ -28,6 +28,8 @@ export default new Vuex.Store({
     currentBuilding: '惟义楼',
     currentTeacher : {},
     lastUpdateTime: null,
+    beginDate: null,
+    endDate: null
   },
   getters: {
     ClassroomTableRows(state) {
@@ -151,9 +153,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    updateAllClassroomInfo(context, currentBuilding) {
+    updateAllClassroomInfo(context, params) {
       return new Promise((resolve, reject) => {
-        axios.get(apiConfig.getClassroomApi(currentBuilding)).then((response) => {
+        axios.get(apiConfig.getClassroomApi(params)).then((response) => {
             let used_classrooms = response.data['used_classrooms'];
             let applied_classrooms =  {}
             if ('applied_classrooms' in response.data) {
@@ -167,7 +169,7 @@ export default new Vuex.Store({
             let tasks = []
             tasks.push(Storage.set('usedClassrooms', used_classrooms));
             tasks.push(Storage.set('appliedClassrooms', applied_classrooms));
-            tasks.push(Storage.set('currentBuilding', currentBuilding));
+            tasks.push(Storage.set('currentBuilding', params['building']));
             Promise.all(tasks).then(() => resolve());
         }).catch(() => {
             reject();

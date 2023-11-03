@@ -1,3 +1,4 @@
+import apiConfig from "@/apiConfig";
 
 export const dataManagerMixin = {
   methods: {
@@ -7,11 +8,16 @@ export const dataManagerMixin = {
       }, 0)
       // const hide = this.$message.loading('正在检查数据更新...', 0);
       this.$store.dispatch('updateFromNullStorage').then(() => {
+        let params = {
+              'building': '惟义楼'
+            }
+        console.log('fdfdf', apiConfig.getClassroomApi(params))
         this.$store.dispatch('checkUpdateAllInfos').then((data) => {
           if (data != null) {
             const hide2 = this.$message.loading('正在更新基础数据...', 0);
             hide2();
-            this.$store.dispatch('updateAllClassroomInfo', '惟义楼').then(() => {
+
+            this.$store.dispatch('updateAllClassroomInfo', params).then(() => {
               this.$message.success('课程数据已更新！');
             }).catch(()=> {
               this.$message.error('更新课程数据时出错，请刷新页面重试！', 30);

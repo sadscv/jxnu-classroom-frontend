@@ -1,6 +1,19 @@
 <template>
   <div class="lookup-panel-wrapper">
     <LookupConditions ref="conditions" @filter="countdown(300, true)" />
+    <div v-if="this.$store.state.isAdmin">
+      起始日期：
+      <a-date-picker
+        v-model="beginDate"
+        format="YYYY-MM-DD"
+      />
+      结束日期:
+      <a-date-picker
+        v-model="endDate"
+        format="YYYY-MM-DD"
+      />
+    </div>
+
     <!--suppress JSUnusedGlobalSymbols -->
     <a-divider />
     <div slot="content" class="selected-classroom" v-if="getSelectedTimeslot() !== null">
@@ -48,6 +61,7 @@
           <a-popover placement="left">
             <div slot="content" class="about-data">
               <ul>
+
                 <li> 选择所需的日期和时段后，将显示该时段全部可申请教室。</li>
                 <li>
                   所有数据<strong>【非实时】</strong>，可能与实际情况存在误差，仅供参考。<br />
@@ -57,6 +71,7 @@
                     <a-divider type="vertical" />
                     <span>{{getUpdateTime()}}</span>
                   </a-tag>
+
                   <a-button type="primary" size="small" class="about-data-update-button" @click="updateData()">更新数据</a-button>
 
                 </li>

@@ -14,6 +14,8 @@ export const LookupPanelMixin = {
       submitButtonLoading: false,
       submitButtonDisabled: false,
       visible: false,
+      beginDate: null,
+      endDate: null
     };
   },
   mounted() {
@@ -156,10 +158,12 @@ export const LookupPanelMixin = {
     },
     updateData() {
       let currentBuilding = this.$store.state.currentBuilding
-      if (currentBuilding === null) {
-        currentBuilding = '惟义楼'
+      let params = {
+        'builidng': currentBuilding ? currentBuilding : '惟义楼',
+        'beginDate': moment(this.beginDate).format('YYYY-MM-DD'),
+        'endDate': moment(this.endDate).format('YYYY-MM-DD')
       }
-      this.$store.dispatch('updateAllClassroomInfo', currentBuilding).then(() => {
+      this.$store.dispatch('updateAllClassroomInfo', params).then(() => {
       this.$store.dispatch('refreshUpdateTime', moment.now())
       console.log(moment.now())
           this.$message.success('课程数据已更新！');

@@ -3,8 +3,6 @@
     <a-form ref="form" layout="inline">
       <a-form-item label="选择日期">
         <a-date-picker format="YYYY-MM-DD"
-                       :disabled-date="disabledDate"
-                       class="w-120px"
                        v-model="conditions.class_time.date"
         >
         <template slot="renderExtraFooter" >

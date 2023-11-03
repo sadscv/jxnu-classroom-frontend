@@ -100,8 +100,11 @@
         // const hide = this.$message.loading('正在检查数据更新...', 0);
         this.$store.dispatch('updateFromNullStorage').then(() => {
         this.$store.dispatch('checkUpdateAllInfos').then((data) => {
+          let params = {
+          'building': building
+          }
           if (data != null) {
-            this.$store.dispatch('updateAllClassroomInfo', building).then(() => {
+            this.$store.dispatch('updateAllClassroomInfo', params).then(() => {
               this.$message.success('基础数据已更新！');
             }).catch(()=> {
               this.$message.error('更新课程数据时出错，请刷新页面重试！', 30);
